@@ -17,7 +17,7 @@ export function About() {
           style={{ fontVariationSettings: '"opsz" 96, "wght" 360' }}
         >
           <p>
-            poiyee paints in oil, building each canvas through{' '}
+            poiyee paints in acrylic, building each canvas through{' '}
             <em className="text-accent italic">palette-knife layers</em> that hold the breath of a single
             morning and the weight of every one that came before.
           </p>
@@ -25,15 +25,15 @@ export function About() {
             Her subjects return — water surfaces, distant horizons, the colour of light just before it
             changes. The work is not landscape, exactly. It is what the body remembers after looking.
           </p>
-          <p>She lives and works in Mumbai. Commissions and acquisitions are open by enquiry.</p>
+          <p>She lives and works in Zurich. Commissions and acquisitions are open by enquiry.</p>
         </div>
 
         <div />
 
         <dl className="font-mono text-[11px] tracking-[0.18em] uppercase text-pencil grid gap-6">
           <Fact label="Born">—</Fact>
-          <Fact label="Lives & works">Mumbai, India</Fact>
-          <Fact label="Medium">Oil on canvas<br />Palette knife</Fact>
+          <Fact label="Lives & works">Zurich, Switzerland</Fact>
+          <Fact label="Medium">Acrylic on canvas<br />Palette knife</Fact>
           <Fact label="Exhibitions">—</Fact>
           <Fact label="Representation">—</Fact>
           <Fact label="Press">—</Fact>

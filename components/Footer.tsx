@@ -10,7 +10,7 @@ export function Footer() {
             poiyee<span className="text-accent">.</span>
           </div>
           <p className="text-pencil max-w-[32ch] mt-4">
-            Paintings, prints, and commissions. Mumbai — and from there, by post.
+            Paintings, prints, and commissions. Zurich — and from there, by post.
           </p>
         </div>
 

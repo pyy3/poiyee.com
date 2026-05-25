@@ -49,7 +49,7 @@ export const artwork = defineType({
       title: 'Medium',
       type: 'string',
       fieldset: 'physical',
-      initialValue: 'Oil on canvas',
+      initialValue: 'Acrylic on canvas',
     }),
     defineField({
       name: 'dimensions',
@@ -128,6 +128,14 @@ export const artwork = defineType({
     defineField({
       name: 'isAvailable',
       title: 'Available for acquisition',
+      type: 'boolean',
+      fieldset: 'store',
+      initialValue: false,
+    }),
+    defineField({
+      name: 'isSold',
+      title: 'Sold',
+      description: 'Shows a "Sold" corner label on the gallery thumbnail and in the lightbox.',
       type: 'boolean',
       fieldset: 'store',
       initialValue: false,

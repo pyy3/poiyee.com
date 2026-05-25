@@ -85,6 +85,11 @@ export function Gallery({ works }: { works: Work[] }) {
                     {pad(w.media.length)} media
                   </span>
                 )}
+                {w.isSold && (
+                  <span className="absolute top-3 right-3 font-mono text-[10px] tracking-[0.22em] uppercase bg-accent text-paper px-2.5 py-1 backdrop-blur-sm">
+                    Sold
+                  </span>
+                )}
               </div>
               <div className="mt-4 grid grid-cols-[1fr_auto] gap-x-6 items-baseline">
                 <div>
@@ -173,6 +178,11 @@ export function Gallery({ works }: { works: Work[] }) {
               >
                 {current.name}
               </span>
+              {current.isSold && (
+                <span className="font-mono text-[10px] tracking-[0.22em] uppercase bg-accent text-paper px-2.5 py-1">
+                  Sold
+                </span>
+              )}
               <span className="text-ink font-medium">
                 {pad(mediaIdx + 1)} / {pad(current.media.length)}
               </span>

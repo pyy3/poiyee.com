@@ -23,9 +23,9 @@ export function Hero({
       </h1>
 
       <div className="mt-9 flex flex-wrap gap-y-6 gap-x-10 items-center text-[11px] tracking-[0.22em] uppercase text-pencil font-mono">
-        <span>Paintings &nbsp;·&nbsp; Oil on canvas</span>
+        <span>Paintings &nbsp;·&nbsp; Acrylic on canvas</span>
         <span className="inline-block w-9 h-px bg-pencil/60" />
-        <span>Mumbai · India</span>
+        <span>Zurich · Switzerland</span>
         <span className="inline-block w-9 h-px bg-pencil/60" />
         <span>2024 — present</span>
       </div>

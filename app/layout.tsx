@@ -19,7 +19,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: 'poiyee — paintings',
-  description: 'Paintings by poiyee. Oil on canvas. Lyrical seascapes and landscapes.',
+  description: 'Paintings by poiyee. Acrylic on canvas. Lyrical seascapes and landscapes.',
   metadataBase: new URL('https://poiyee.com'),
   manifest: '/manifest.webmanifest',
   applicationName: 'poiyee',
@@ -38,14 +38,14 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'poiyee — paintings',
-    description: 'Oil on canvas. Mumbai.',
+    description: 'Acrylic on canvas. Zurich.',
     type: 'website',
     images: [{ url: '/icons/og.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'poiyee — paintings',
-    description: 'Oil on canvas. Mumbai.',
+    description: 'Acrylic on canvas. Zurich.',
     images: ['/icons/og.png'],
   },
 };
