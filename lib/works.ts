@@ -1,6 +1,11 @@
-/* Sample artwork data — used when Sanity has no content yet.
-   Once you add artworks at /studio, Phase 3.5 will swap this for a Sanity query.
-   Schema mirrors the Sanity `artwork.media[]` shape so the components don't change. */
+/* Works data layer.
+   - Live: queries Sanity. As soon as you publish 1 artwork in Studio,
+     the site shows your real catalogue and ignores the sample data below.
+   - Fallback: when Sanity returns zero artworks, the placeholder set
+     is shown so the design isn't empty during early setup. */
+
+import { client } from '@/sanity/lib/client';
+import { allArtworksQuery } from '@/sanity/lib/queries';
 
 export type Media = {
   src: string;
@@ -10,26 +15,74 @@ export type Media = {
 };
 
 export type Work = {
-  id: string;          // folder number, e.g. "01"
+  id: string;
   slug: string;
   name: string;
   meta: string;
-  ratio: string;       // primary photo aspect, e.g. "4/3" or "3/4"
+  ratio: string;
   orient: 'landscape' | 'portrait';
   media: Media[];
-  isSold?: boolean;    // shows a "Sold" corner badge on the thumbnail + in lightbox
+  isSold?: boolean;
 };
+
+type SanityArtwork = {
+  _id: string;
+  title?: string;
+  slug?: string;
+  number?: number;
+  year?: number;
+  medium?: string;
+  dimensions?: { width?: number; height?: number; depth?: number };
+  isSold?: boolean;
+  media?: Array<{
+    _key: string;
+    src?: string;
+    dimensions?: { width: number; height: number; aspectRatio: number };
+    caption?: string;
+    kind?: Media['kind'];
+    isPrimary?: boolean;
+  }>;
+};
+
+function transform(a: SanityArtwork): Work {
+  const media = (a.media ?? []).filter((m) => m.src);
+  const primary = media.find((m) => m.isPrimary) ?? media[0];
+  const w = primary?.dimensions?.width ?? 1200;
+  const h = primary?.dimensions?.height ?? 1600;
+  const ratio = `${w}/${h}`;
+  const orient: 'landscape' | 'portrait' = w > h ? 'landscape' : 'portrait';
+
+  const dimStr =
+    a.dimensions?.height && a.dimensions?.width
+      ? `${a.dimensions.height} × ${a.dimensions.width} cm`
+      : '120 × 90 cm';
+  const meta = [a.medium || 'Acrylic on canvas', a.year, dimStr].filter(Boolean).join(' · ');
+
+  return {
+    id: a.number ? String(a.number).padStart(2, '0') : a._id.slice(-4),
+    slug: a.slug || a._id,
+    name: a.title || 'Untitled',
+    meta,
+    ratio,
+    orient,
+    isSold: a.isSold,
+    media: media.map((m) => ({
+      src: m.src!,
+      caption: m.caption,
+      kind: m.kind,
+      isPrimary: m.isPrimary,
+    })),
+  };
+}
 
 const r = (n: number) => `/inspiration/${String(n).padStart(2, '0')}`;
 
+/* ---- Sample / demo data — shown only when Sanity has zero artworks ---- */
 export const sampleWorks: Work[] = [
-  // Landscape pair — top feature row
-  { id: '01', slug: 'blue-void',          name: 'Untitled (Blue Void)',     meta: 'Acrylic on canvas · 2026 · 120 × 90 cm', ratio: '4/3', orient: 'landscape',
+  { id: '01', slug: 'blue-void', name: 'Untitled (Blue Void)', meta: 'Acrylic on canvas · 2026 · 120 × 90 cm', ratio: '4/3', orient: 'landscape',
     media: [{ src: `${r(1)}/art-01.jpeg`, caption: 'Full canvas', kind: 'full', isPrimary: true }] },
-  { id: '02', slug: 'morning-range',      name: 'Morning Range',            meta: 'Acrylic on canvas · 2025 · 120 × 90 cm', ratio: '4/3', orient: 'landscape',
+  { id: '02', slug: 'morning-range', name: 'Morning Range', meta: 'Acrylic on canvas · 2025 · 120 × 90 cm', ratio: '4/3', orient: 'landscape',
     media: [{ src: `${r(2)}/art-02.jpeg`, caption: 'Full canvas', kind: 'full', isPrimary: true }] },
-
-  // Portraits — 21 pieces in 7 rows of 3
   { id: '03', slug: 'reflections-golden-hour', name: 'Reflections, Golden Hour', meta: 'Acrylic on canvas · 2025 · 120 × 90 cm', ratio: '3/4', orient: 'portrait',
     media: [{ src: `${r(3)}/art-03.jpeg`, caption: 'Full canvas', kind: 'full', isPrimary: true }] },
   { id: '04', slug: 'shoal', name: 'Shoal', meta: 'Acrylic on canvas · 2025 · 120 × 90 cm', ratio: '3/4', orient: 'portrait', isSold: true,
@@ -97,11 +150,23 @@ export const sampleWorks: Work[] = [
     ] },
 ];
 
-export function getAllWorks(): Work[] {
-  // TODO Phase 3.5: replace with `client.fetch(allArtworksQuery)` once Sanity has content.
+export async function getAllWorks(): Promise<Work[]> {
+  try {
+    const sanityWorks = await client.fetch<SanityArtwork[]>(
+      allArtworksQuery,
+      {},
+      { next: { revalidate: 60 } },
+    );
+    if (sanityWorks && sanityWorks.length > 0) {
+      return sanityWorks.map(transform);
+    }
+  } catch (err) {
+    console.warn('[lib/works] Sanity fetch failed, using sample data:', err);
+  }
   return sampleWorks;
 }
 
-export function getWorkBySlug(slug: string): Work | undefined {
-  return sampleWorks.find((w) => w.slug === slug);
+export async function getWorkBySlug(slug: string): Promise<Work | undefined> {
+  const all = await getAllWorks();
+  return all.find((w) => w.slug === slug);
 }

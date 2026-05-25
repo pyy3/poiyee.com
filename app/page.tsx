@@ -6,8 +6,10 @@ import { Acquire } from '@/components/Acquire';
 import { Footer } from '@/components/Footer';
 import { getAllWorks } from '@/lib/works';
 
-export default function Home() {
-  const works = getAllWorks();
+export const revalidate = 60;
+
+export default async function Home() {
+  const works = await getAllWorks();
 
   return (
     <main className="relative z-10 max-w-[1440px] mx-auto px-[clamp(20px,4vw,56px)] pt-7">
