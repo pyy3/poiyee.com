@@ -49,8 +49,6 @@ export const sampleWorks: Work[] = [
     ] },
   { id: '10', slug: 'distant-horizon', name: 'Distant Horizon', meta: 'Oil on canvas · 2024 · 80 × 60 cm', ratio: '3/4', orient: 'portrait',
     media: [{ src: `${r(10)}/art-12.jpeg`, caption: 'Full canvas', kind: 'full', isPrimary: true }] },
-  { id: '11', slug: 'pastel-i', name: 'Pastel I', meta: 'Oil on canvas · 2025 · 80 × 60 cm', ratio: '3/4', orient: 'portrait',
-    media: [{ src: `${r(11)}/art-13.jpeg`, caption: 'Full canvas', kind: 'full', isPrimary: true }] },
   { id: '12', slug: 'pastel-ii', name: 'Pastel II', meta: 'Oil on canvas · 2025 · 80 × 60 cm', ratio: '3/4', orient: 'portrait',
     media: [{ src: `${r(12)}/art-14.jpeg`, caption: 'Full canvas', kind: 'full', isPrimary: true }] },
   { id: '13', slug: 'water-reflections', name: 'Water, Reflections', meta: 'Oil on canvas · 2025 · 80 × 60 cm', ratio: '3/4', orient: 'portrait',
