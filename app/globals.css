@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+/* Design tokens — Tailwind v4 CSS-first config.
+   Generates classes like bg-paper, text-ink, font-display. */
+@theme {
+  --color-paper:      #F5F0E8;
+  --color-paper-deep: #E8E0D2;
+  --color-ink:        #1A2230;
+  --color-pencil:     #8A8275;
+  --color-accent:     #1F4E73;
+  --color-ochre:      #C18A3E;
+
+  /* Fraunces and JetBrains Mono load via next/font (variables set in layout.tsx).
+     Neue Montreal loads via Fontshare CDN — reference its family name directly. */
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-body:    "Neue Montreal", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:    var(--font-jetbrains-mono), ui-monospace, monospace;
+}
+
+/* Base reset and global type */
+html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.55;
+  font-feature-settings: "ss01", "kern";
+  margin: 0;
+}
+
+/* Paper grain — subtle SVG noise overlay across whole site */
+body::before {
+  content: "";
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.1, 0 0 0 0 0.13, 0 0 0 0 0.18, 0 0 0 0.5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/></svg>");
+  mix-blend-mode: multiply;
+  opacity: 0.06;
+}
+
+/* Studio route uses default browser styling, escape the body overlay */
+body:has(#__next > div[data-sanity-studio]) { background: white; }
+body:has(#__next > div[data-sanity-studio])::before { display: none; }
+
+::selection { background: var(--color-accent); color: var(--color-paper); }
