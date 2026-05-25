@@ -1,17 +1,13 @@
+/* These three are NOT secrets — projectId and dataset are public,
+   API version is just a date string. Hardcoded as fallbacks so the Studio
+   works standalone (via `sanity deploy`) as well as inside Next.js (which
+   reads from .env.local). The write token stays env-only (server-side). */
+
+export const projectId =
+  process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'ni6m06cn';
+
+export const dataset =
+  process.env.NEXT_PUBLIC_SANITY_DATASET || 'production';
+
 export const apiVersion =
   process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2025-01-01';
-
-export const dataset = assertValue(
-  process.env.NEXT_PUBLIC_SANITY_DATASET,
-  'Missing env: NEXT_PUBLIC_SANITY_DATASET',
-);
-
-export const projectId = assertValue(
-  process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
-  'Missing env: NEXT_PUBLIC_SANITY_PROJECT_ID',
-);
-
-function assertValue<T>(v: T | undefined, errorMessage: string): T {
-  if (v === undefined) throw new Error(errorMessage);
-  return v;
-}
