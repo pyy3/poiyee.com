@@ -3,8 +3,8 @@
 /* Design tokens — Tailwind v4 CSS-first config.
    Generates classes like bg-paper, text-ink, font-display. */
 @theme {
-  --color-paper:      #F5F0E8;
-  --color-paper-deep: #E8E0D2;
+  --color-paper:      #FBFAF7;
+  --color-paper-deep: #EFEEEA;
   --color-ink:        #1A2230;
   --color-pencil:     #8A8275;
   --color-accent:     #1F4E73;

@@ -115,7 +115,7 @@ export function Gallery({ works }: { works: Work[] }) {
       {current && (
         <div
           className="fixed inset-0 z-50 flex flex-col items-center justify-center"
-          style={{ backdropFilter: 'blur(8px)', background: 'rgba(245,240,232,0.96)' }}
+          style={{ backdropFilter: 'blur(8px)', background: 'rgba(251,250,247,0.96)' }}
           onClick={(e) => {
             if (e.target === e.currentTarget) close();
           }}
