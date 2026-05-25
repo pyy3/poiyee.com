@@ -37,6 +37,11 @@ yarn-error.log*
 # vercel
 .vercel
 
+# sanity deploy build artifacts
+/dist
+/.sanity
+/poiyee
+
 # next-pwa generated files
 public/sw.js
 public/sw.js.map
