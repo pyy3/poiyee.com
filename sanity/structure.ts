@@ -20,7 +20,10 @@ export const structure: StructureResolver = (S) =>
       S.documentTypeListItem('exhibition').title('Exhibitions'),
       S.documentTypeListItem('post').title('Posts'),
       S.divider(),
+      S.documentTypeListItem('inquiry').title('Inquiries'),
+      S.divider(),
       ...S.documentTypeListItems().filter(
-        (item) => !['artwork', 'exhibition', 'post', ...SINGLETONS].includes(item.getId() ?? ''),
+        (item) =>
+          !['artwork', 'exhibition', 'post', 'inquiry', ...SINGLETONS].includes(item.getId() ?? ''),
       ),
     ]);

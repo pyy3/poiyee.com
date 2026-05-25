@@ -196,6 +196,14 @@ export function Gallery({ works }: { works: Work[] }) {
               >
                 {detail ? '← Full view' : 'Detail →'}
               </button>
+              {!current.isSold && (
+                <a
+                  href={`/contact?kind=acquisition&work=${encodeURIComponent(current.slug)}`}
+                  className="border border-ink bg-ink text-paper hover:bg-accent hover:border-accent px-4 py-2 font-mono text-[11px] tracking-[0.22em] uppercase no-underline"
+                >
+                  Enquire →
+                </a>
+              )}
             </div>
 
             {current.media.length > 1 && (

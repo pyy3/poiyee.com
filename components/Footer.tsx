@@ -21,9 +21,10 @@ export function Footer() {
         </FooterCol>
 
         <FooterCol title="Contact">
+          <FooterLink href="/contact?kind=acquisition">Acquire a work</FooterLink>
+          <FooterLink href="/contact?kind=commission">Commission</FooterLink>
+          <FooterLink href="/contact?kind=studio-visit">Studio visit</FooterLink>
           <FooterLink href="mailto:hello@poiyee.com">hello@poiyee.com</FooterLink>
-          <FooterLink href="#">Studio visits</FooterLink>
-          <FooterLink href="#">Commissions</FooterLink>
         </FooterCol>
 
         <FooterCol title="Elsewhere">

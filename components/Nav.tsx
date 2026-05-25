@@ -12,7 +12,7 @@ export function Nav() {
         <li><a href="#index" className="text-ink no-underline hover:text-accent">Index</a></li>
         <li><a href="#about" className="text-ink no-underline hover:text-accent">About</a></li>
         <li><a href="#acquire" className="text-ink no-underline hover:text-accent">Acquire</a></li>
-        <li><a href="#contact" className="text-ink no-underline hover:text-accent">Contact</a></li>
+        <li><a href="/contact" className="text-ink no-underline hover:text-accent">Contact</a></li>
       </ul>
     </nav>
   );

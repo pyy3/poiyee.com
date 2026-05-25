@@ -26,7 +26,7 @@ export function Acquire() {
             Shipping worldwide, packed by hand.
           </p>
           <a
-            href="#contact"
+            href="/contact?kind=acquisition"
             className="inline-block mt-7 px-5 py-3.5 bg-ink text-paper hover:bg-accent font-mono text-[11px] tracking-[0.22em] uppercase no-underline transition-colors"
           >
             Enquire to acquire →
