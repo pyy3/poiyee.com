@@ -38,14 +38,21 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'poiyee — paintings',
-    description: 'Acrylic on canvas. Zurich.',
+    description:
+      'A practice in pigment, weight and water. Acrylic on canvas. Studio in Zurich, Switzerland.',
     type: 'website',
-    images: [{ url: '/icons/og.png', width: 1200, height: 630 }],
+    siteName: 'poiyee',
+    url: 'https://poiyee.com',
+    locale: 'en_US',
+    images: [
+      { url: '/icons/og.png', width: 1200, height: 630, alt: 'poiyee — paintings' },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'poiyee — paintings',
-    description: 'Acrylic on canvas. Zurich.',
+    description:
+      'A practice in pigment, weight and water. Acrylic on canvas. Studio in Zurich, Switzerland.',
     images: ['/icons/og.png'],
   },
 };

@@ -6,6 +6,20 @@ import { ContactForm } from '@/components/ContactForm';
 export const metadata = {
   title: 'Contact — poiyee',
   description: 'Enquire about acquisitions, commissions, or a studio visit.',
+  openGraph: {
+    title: 'Contact — poiyee',
+    description: 'Enquire about acquisitions, commissions, or a studio visit.',
+    url: 'https://poiyee.com/contact',
+    type: 'website',
+    siteName: 'poiyee',
+    images: [{ url: '/icons/og.png', width: 1200, height: 630, alt: 'poiyee — paintings' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Contact — poiyee',
+    description: 'Enquire about acquisitions, commissions, or a studio visit.',
+    images: ['/icons/og.png'],
+  },
 };
 
 export default function ContactPage() {
