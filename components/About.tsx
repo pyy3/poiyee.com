@@ -1,43 +1,43 @@
+/* About the practice — a large typographic statement in the Monument language,
+   with a spec column of facts alongside. */
 export function About() {
   return (
-    <section id="about" className="border-t border-ink/15 pt-24 pb-16">
-      <div className="flex items-baseline gap-5 mb-16 font-mono text-[11px] tracking-[0.22em] uppercase text-pencil">
-        <span
-          className="font-display italic text-[56px] leading-none text-ink font-light"
-          style={{ fontVariationSettings: '"opsz" 144, "wght" 320', letterSpacing: '-0.02em' }}
-        >
-          II
-        </span>
-        <span className="pb-2">— About the practice</span>
+    <section
+      id="about"
+      className="mx-auto max-w-[1300px] px-[clamp(22px,4vw,54px)] py-[16vh]"
+    >
+      <div className="mb-16 font-mono text-[11px] uppercase tracking-[0.22em] text-pencil">
+        About the practice
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-[5fr_1fr_5fr] gap-16 items-start">
-        <div
-          className="font-display text-[clamp(20px,1.6vw,24px)] leading-[1.5] text-ink space-y-4"
-          style={{ fontVariationSettings: '"opsz" 96, "wght" 360' }}
-        >
+      <div className="grid grid-cols-1 gap-x-16 gap-y-12 md:grid-cols-[7fr_4fr]">
+        <div className="max-w-[24ch]">
+          <p className="font-display text-[clamp(30px,4.4vw,64px)] font-light leading-[1.1] tracking-[-0.02em]">
+            The work is not landscape, exactly. It is what the body{' '}
+            <span className="font-semibold text-accent">remembers after looking</span>.
+          </p>
+        </div>
+
+        <div className="space-y-5 text-[17px] leading-[1.7] text-ink/80 md:pt-3">
           <p>
-            poiyee paints in acrylic, building each canvas through{' '}
-            <em className="text-accent italic">palette-knife layers</em> that hold the breath of a single
-            morning and the weight of every one that came before.
+            poiyee paints in acrylic, building each canvas through palette-knife layers that hold the
+            breath of a single morning and the weight of every one that came before.
           </p>
           <p>
             Her subjects return — water surfaces, distant horizons, the colour of light just before it
-            changes. The work is not landscape, exactly. It is what the body remembers after looking.
+            changes. She lives and works in Zürich. Commissions and acquisitions are open by enquiry.
           </p>
-          <p>She lives and works in Zurich. Commissions and acquisitions are open by enquiry.</p>
+
+          <dl className="grid gap-5 pt-6 font-mono text-[11px] uppercase tracking-[0.16em] text-pencil">
+            <Fact label="Lives & works">Zürich, Switzerland</Fact>
+            <Fact label="Medium">
+              Acrylic on canvas
+              <br />
+              Palette knife
+            </Fact>
+            <Fact label="Enquiries">hello@poiyee.com</Fact>
+          </dl>
         </div>
-
-        <div />
-
-        <dl className="font-mono text-[11px] tracking-[0.18em] uppercase text-pencil grid gap-6">
-          <Fact label="Born">—</Fact>
-          <Fact label="Lives & works">Zurich, Switzerland</Fact>
-          <Fact label="Medium">Acrylic on canvas<br />Palette knife</Fact>
-          <Fact label="Exhibitions">—</Fact>
-          <Fact label="Representation">—</Fact>
-          <Fact label="Press">—</Fact>
-        </dl>
       </div>
     </section>
   );
@@ -45,9 +45,9 @@ export function About() {
 
 function Fact({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div>
-      <dt className="text-ink mb-1">{label}</dt>
-      <dd className="m-0 text-pencil">{children}</dd>
+    <div className="flex justify-between gap-6 border-t border-line pt-4">
+      <dt className="text-ink">{label}</dt>
+      <dd className="m-0 text-right text-pencil">{children}</dd>
     </div>
   );
 }

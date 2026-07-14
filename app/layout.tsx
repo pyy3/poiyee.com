@@ -1,19 +1,18 @@
 import type { Metadata, Viewport } from 'next';
-import { Fraunces, JetBrains_Mono } from 'next/font/google';
+import { Bricolage_Grotesque, Space_Mono } from 'next/font/google';
 import './globals.css';
 
-const fraunces = Fraunces({
-  variable: '--font-fraunces',
+const bricolage = Bricolage_Grotesque({
+  variable: '--font-bricolage',
   subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
-  style: ['normal', 'italic'],
+  weight: ['300', '400', '500', '600', '700', '800'],
   display: 'swap',
 });
 
-const jetbrainsMono = JetBrains_Mono({
-  variable: '--font-jetbrains-mono',
+const spaceMono = Space_Mono({
+  variable: '--font-space-mono',
   subsets: ['latin'],
-  weight: ['400', '500'],
+  weight: ['400', '700'],
   display: 'swap',
 });
 
@@ -58,13 +57,13 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#1A2230',
+  themeColor: '#FCFCFB',
   colorScheme: 'light',
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${fraunces.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en" className={`${bricolage.variable} ${spaceMono.variable}`}>
       <head>
         <link rel="preconnect" href="https://api.fontshare.com" crossOrigin="" />
         <link

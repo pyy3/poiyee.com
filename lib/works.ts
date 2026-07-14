@@ -150,6 +150,26 @@ export const sampleWorks: Work[] = [
     ] },
 ];
 
+/* Minimum real artworks before Sanity content supersedes the sample catalogue.
+   Guards against a single stray/placeholder document hiding the full site. */
+const MIN_SANITY_WORKS = 4;
+
+/* Split "Acrylic on canvas · 2025 · 180 × 240 cm" into its parts.
+   widthCm is the first dimension number, used for the scale annotation. */
+export function parseMeta(meta: string): {
+  medium: string;
+  year?: string;
+  dimensions?: string;
+  widthCm?: number;
+} {
+  const parts = meta.split('·').map((s) => s.trim());
+  const medium = parts[0] ?? 'Acrylic on canvas';
+  const year = parts.find((p) => /^\d{4}$/.test(p));
+  const dimensions = parts.find((p) => /×/.test(p));
+  const widthCm = dimensions ? Number(dimensions.match(/(\d+)/)?.[1]) : undefined;
+  return { medium, year, dimensions, widthCm };
+}
+
 export async function getAllWorks(): Promise<Work[]> {
   try {
     const sanityWorks = await client.fetch<SanityArtwork[]>(
@@ -157,7 +177,7 @@ export async function getAllWorks(): Promise<Work[]> {
       {},
       { next: { revalidate: 60 } },
     );
-    if (sanityWorks && sanityWorks.length > 0) {
+    if (sanityWorks && sanityWorks.length >= MIN_SANITY_WORKS) {
       return sanityWorks.map(transform);
     }
   } catch (err) {
@@ -169,4 +189,16 @@ export async function getAllWorks(): Promise<Work[]> {
 export async function getWorkBySlug(slug: string): Promise<Work | undefined> {
   const all = await getAllWorks();
   return all.find((w) => w.slug === slug);
+}
+
+/* Returns the work plus its neighbours (wrapping around) for prev/next nav. */
+export async function getWorkWithNeighbours(
+  slug: string,
+): Promise<{ work: Work; prev: Work; next: Work; index: number; total: number } | undefined> {
+  const all = await getAllWorks();
+  const i = all.findIndex((w) => w.slug === slug);
+  if (i === -1) return undefined;
+  const prev = all[(i - 1 + all.length) % all.length];
+  const next = all[(i + 1) % all.length];
+  return { work: all[i], prev, next, index: i, total: all.length };
 }
