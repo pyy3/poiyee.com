@@ -5,6 +5,7 @@ import Link from 'next/link';
 import type { PortableTextBlock } from '@portabletext/react';
 import { dimensionsLabel, type Work } from '@/lib/works';
 import { Headline, Prose } from './Headline';
+import { SoldBadge } from './SoldBadge';
 
 type Props = {
   work: Work;
@@ -102,8 +103,12 @@ export function WorkDetail({
         </div>
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[rgba(8,14,20,0.3)] via-transparent to-[rgba(8,14,20,0.6)]" />
         <div className="absolute left-[clamp(22px,4vw,54px)] bottom-[clamp(30px,7vh,72px)] z-[3] max-w-[calc(100%-2*clamp(22px,4vw,54px))] bg-ink/55 px-[clamp(18px,2.4vw,32px)] py-[clamp(16px,2.2vw,28px)] text-white backdrop-blur-sm">
-          <div className="mb-4 font-mono text-[11px] uppercase tracking-[0.2em] opacity-90">
-            Work № {String(index + 1).padStart(2, '0')} · {work.isSold ? 'Sold' : 'Available'}
+          <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-[11px] uppercase tracking-[0.2em]">
+            <span className="opacity-90">
+              Work № {String(index + 1).padStart(2, '0')}
+              {!work.isSold && ' · Available'}
+            </span>
+            {work.isSold && <SoldBadge />}
           </div>
           <h1 className="font-display text-[clamp(44px,8vw,132px)] font-semibold leading-[0.92] tracking-[-0.03em] text-balance">
             {work.name}
@@ -222,7 +227,7 @@ export function WorkDetail({
           {work.editionInfo && <Spec label="Edition">{work.editionInfo}</Spec>}
           {work.framing && <Spec label="Framing">{work.framing}</Spec>}
           <Spec label="Availability">
-            <span className={work.isSold ? 'text-pencil' : 'text-accent'}>
+            <span className={work.isSold ? 'text-sold' : 'text-accent'}>
               {work.isSold ? 'Sold' : 'Available'}
             </span>
           </Spec>

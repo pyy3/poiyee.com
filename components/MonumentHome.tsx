@@ -5,6 +5,7 @@ import Link from 'next/link';
 import type { PortableTextBlock } from '@portabletext/react';
 import { workMeta, type Work } from '@/lib/works';
 import { Headline } from './Headline';
+import { SoldBadge } from './SoldBadge';
 
 /* The immersive homepage: a full-viewport hero, an intro band, and each work
    presented monumentally (edge-to-edge, with parallax and a scale annotation).
@@ -202,16 +203,16 @@ export function MonumentHome({
                   {String(i + 1).padStart(2, '0')}
                 </div>
                 <div className="pointer-events-auto max-w-[min(520px,70%)] bg-paper/90 px-5 py-4 text-right text-ink shadow-[0_18px_40px_-24px_rgba(14,20,27,0.45)] backdrop-blur-sm">
+                  {w.isSold && (
+                    <div className="mb-2">
+                      <SoldBadge />
+                    </div>
+                  )}
                   <Link
                     href={`/work/${w.slug}`}
                     className="font-display text-[clamp(22px,2.6vw,38px)] font-semibold leading-[1.05] tracking-[-0.01em] text-ink no-underline"
                   >
                     {w.name}
-                    {w.isSold && (
-                      <span className="ml-3 whitespace-nowrap align-middle font-mono text-[11px] tracking-[0.2em] text-pencil">
-                        · Sold
-                      </span>
-                    )}
                   </Link>
                   <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.18em] text-ink/70">
                     {workMeta(w)}
