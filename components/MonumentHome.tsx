@@ -173,15 +173,16 @@ export function MonumentHome({
             >
               <Link
                 href={`/work/${w.slug}`}
-                data-parallax="0.1"
                 aria-label={`View ${w.name}`}
-                className="work-media group relative block h-[82vh] w-full overflow-hidden bg-paper-deep"
+                className="work-media group relative flex h-[82vh] w-full items-center justify-center"
               >
+                {/* The whole photo, uncropped: the wall or easel around a painting is
+                    part of how it is shown. */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={w.media[0].src}
                   alt={w.name}
-                  className="absolute inset-x-0 -inset-y-[8%] h-[116%] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                  className="max-h-full max-w-full object-contain shadow-[0_40px_80px_-50px_rgba(14,20,27,0.45)] transition-transform duration-700 group-hover:scale-[1.015]"
                 />
               </Link>
 
@@ -194,10 +195,10 @@ export function MonumentHome({
                 </div>
               )}
 
-              {/* caption: the number blends with the image; the name sits on a
-                  paper panel so it stays legible over light and busy paintings */}
+              {/* caption: the name sits on a paper panel so it stays legible over
+                  light and busy paintings */}
               <div className="pointer-events-none absolute inset-x-[clamp(22px,4vw,54px)] bottom-[6vh] z-[3] flex items-end justify-between gap-6">
-                <div className="font-display text-[clamp(64px,12vw,190px)] font-light leading-[0.8] tracking-[-0.04em] text-white mix-blend-difference">
+                <div className="font-display text-[clamp(64px,12vw,190px)] font-light leading-[0.8] tracking-[-0.04em] text-ink">
                   {String(i + 1).padStart(2, '0')}
                 </div>
                 <div className="pointer-events-auto max-w-[min(520px,70%)] bg-paper/90 px-5 py-4 text-right text-ink shadow-[0_18px_40px_-24px_rgba(14,20,27,0.45)] backdrop-blur-sm">
