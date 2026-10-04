@@ -48,23 +48,3 @@ body:has(#__next > div[data-sanity-studio]) { background: white; }
 /* Visible keyboard focus */
 :focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
 
-/* ---- Monument: work reveal ---- */
-.work-media {
-  clip-path: inset(7% 6% 7% 6%);
-  opacity: 0.35;
-  transition: clip-path 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.2s ease;
-}
-.work-section.is-in .work-media { clip-path: inset(0 0 0 0); opacity: 1; }
-
-/* ---- Monument: index rail active state ---- */
-.rail-link { color: var(--color-pencil); }
-.rail-link:hover { color: var(--color-ink); }
-.rail-link.rail-active { color: var(--color-accent); }
-.rail-link.rail-active .rail-tick { width: 40px; background: var(--color-accent); }
-
-/* ---- Monument: scale annotation end caps ---- */
-.scale-tick::before, .scale-tick::after {
-  content: ""; position: absolute; top: -4px; width: 1px; height: 9px; background: currentColor;
-}
-.scale-tick::before { left: 0; }
-.scale-tick::after { right: 0; }
