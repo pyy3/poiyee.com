@@ -33,7 +33,6 @@ export const siteSettingsQuery = groq`
   *[_type == "siteSettings" && _id == "siteSettings"][0]{
     title,
     studioLocation,
-    contactEmail,
     instagram,
     newsletter,
     footerLine,
@@ -55,7 +54,7 @@ export const siteSettingsQuery = groq`
 `;
 
 export const aboutQuery = groq`
-  *[_type == "about" && _id == "about"][0]{ statement, bio, facts[]{ _key, label, value } }
+  *[_type == "about" && _id == "about"][0]{ statement, bio, facts[]{ _key, label, value, link } }
 `;
 
 export const privacyQuery = groq`

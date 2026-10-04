@@ -5,7 +5,7 @@ import { CookieSettingsButton } from './ConsentBanner';
 
 /* Footer — an oversized wordmark and a plain link ledger. */
 export async function Footer() {
-  const { title, contactEmail, instagram, newsletter, footerLine } = await getSiteSettings();
+  const { title, instagram, newsletter, footerLine } = await getSiteSettings();
   const commissionsSlug = await getCommissionsPageSlug();
   return (
     <footer id="contact" className="px-[clamp(22px,4vw,54px)] pb-[8vh] pt-[14vh]">
@@ -24,13 +24,11 @@ export async function Footer() {
           <FooterLink href={commissionsSlug ? `/${commissionsSlug}` : '/contact?kind=commission'}>Commission</FooterLink>
           <FooterLink href="/contact?kind=studio-visit">Studio visit</FooterLink>
         </FooterCol>
-        {(contactEmail || instagram || newsletter) && (
-          <FooterCol title="Contact">
-            {contactEmail && <FooterLink href={`mailto:${contactEmail}`}>{contactEmail}</FooterLink>}
-            {instagram && <FooterLink href={instagram}>Instagram</FooterLink>}
-            {newsletter && <FooterLink href={newsletter}>Newsletter</FooterLink>}
-          </FooterCol>
-        )}
+        <FooterCol title="Contact">
+          <FooterLink href="/contact">Enquire</FooterLink>
+          {instagram && <FooterLink href={instagram}>Instagram</FooterLink>}
+          {newsletter && <FooterLink href={newsletter}>Newsletter</FooterLink>}
+        </FooterCol>
         <FooterCol title="Studio">
           <FooterLink href="/studio">Content studio →</FooterLink>
         </FooterCol>

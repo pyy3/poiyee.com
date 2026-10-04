@@ -21,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ContactPage() {
-  const { contactHeading, contactText, contactEmail, studioLocation } = await getSiteSettings();
+  const { contactHeading, contactText, studioLocation } = await getSiteSettings();
   return (
     <main className="relative mx-auto max-w-[1300px] px-[clamp(22px,4vw,54px)]">
       <Nav />
@@ -41,14 +41,6 @@ export default async function ContactPage() {
             )}
 
             <div className="mt-10 grid gap-4 font-mono text-[11px] uppercase tracking-[0.16em] text-pencil">
-              {contactEmail && (
-                <div className="flex justify-between gap-6 border-t border-line pt-4">
-                  <span className="text-ink">Direct</span>
-                  <a href={`mailto:${contactEmail}`} className="text-pencil no-underline hover:text-accent">
-                    {contactEmail}
-                  </a>
-                </div>
-              )}
               {studioLocation && (
                 <div className="flex justify-between gap-6 border-t border-line pt-4">
                   <span className="text-ink">Studio</span>

@@ -36,6 +36,12 @@ export const about = defineType({
               description: 'Press Enter for a second line.',
               validation: (r) => r.required(),
             }),
+            defineField({
+              name: 'link',
+              title: 'Link',
+              type: 'string',
+              description: 'Optional: makes the value a link, e.g. /contact',
+            }),
           ],
           preview: { select: { title: 'label', subtitle: 'value' } },
         },

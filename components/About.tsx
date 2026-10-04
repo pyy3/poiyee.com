@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { getAbout, hasText } from '@/lib/content';
 import { Headline, Prose } from './Headline';
 
@@ -31,7 +32,13 @@ export async function About() {
             <dl className="grid gap-5 pt-6 font-mono text-[11px] uppercase tracking-[0.16em] text-pencil">
               {facts.map((f) => (
                 <Fact key={f._key} label={f.label}>
-                  {f.value}
+                  {f.link ? (
+                    <Link href={f.link} className="text-pencil no-underline hover:text-accent">
+                      {f.value}
+                    </Link>
+                  ) : (
+                    f.value
+                  )}
                 </Fact>
               ))}
             </dl>
