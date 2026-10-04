@@ -59,7 +59,11 @@ export function siteJsonLd(s: SiteSettings) {
         description: s.artistSummary,
         jobTitle: 'Painter',
         address: address(s.studioLocation),
-        email: s.contactEmail,
+        contactPoint: {
+          '@type': 'ContactPoint',
+          contactType: 'enquiries',
+          url: `${SITE_URL}/contact`,
+        },
         sameAs: s.instagram ? [s.instagram] : undefined,
         url: SITE_URL,
       }),

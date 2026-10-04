@@ -10,7 +10,6 @@ import { aboutQuery, privacyQuery, siteSettingsQuery } from '@/sanity/lib/querie
 export type SiteSettings = {
   title?: string;
   studioLocation?: string;
-  contactEmail?: string;
   instagram?: string;
   newsletter?: string;
   footerLine?: string;
@@ -33,7 +32,7 @@ export type SiteSettings = {
 export type About = {
   statement?: PortableTextBlock[];
   bio?: PortableTextBlock[];
-  facts?: { _key: string; label: string; value: string }[];
+  facts?: { _key: string; label: string; value: string; link?: string }[];
 };
 
 const opts = { next: { revalidate: 60 } };

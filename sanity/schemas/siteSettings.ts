@@ -29,7 +29,13 @@ export const siteSettings = defineType({
       group: 'general',
       description: 'e.g. "Zürich, Switzerland". Shown on painting pages and the contact page.',
     }),
-    defineField({ name: 'contactEmail', title: 'Contact email', type: 'string', group: 'general' }),
+    defineField({
+      name: 'contactEmail',
+      title: 'Contact email',
+      type: 'string',
+      group: 'general',
+      description: 'For reference only: not shown on the site. Visitors are sent to the enquiry form (/contact).',
+    }),
     defineField({ name: 'instagram', title: 'Instagram URL', type: 'url', group: 'general' }),
     defineField({
       name: 'newsletter',

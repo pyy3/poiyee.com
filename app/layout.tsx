@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Allura, Bricolage_Grotesque, Space_Mono } from 'next/font/google';
+import { Bricolage_Grotesque, Fraunces, Space_Mono } from 'next/font/google';
 import './globals.css';
 import { getSiteSettings, sharedSocial } from '@/lib/content';
 import { ConsentBanner } from '@/components/ConsentBanner';
@@ -20,11 +20,13 @@ const spaceMono = Space_Mono({
   display: 'swap',
 });
 
-/* Handwritten script for the artist-name wordmark (nav, work top bar, footer). */
-const allura = Allura({
-  variable: '--font-allura',
+/* Fraunces italic for the artist-name wordmark (nav, work top bar, footer).
+   Loaded as a variable font with the optical-size axis so "opsz" 144 works. */
+const fraunces = Fraunces({
+  variable: '--font-fraunces',
   subsets: ['latin'],
-  weight: '400',
+  style: 'italic',
+  axes: ['opsz'],
   display: 'swap',
 });
 
@@ -67,7 +69,7 @@ export const viewport: Viewport = {
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const settings = await getSiteSettings();
   return (
-    <html lang="en" className={`${bricolage.variable} ${spaceMono.variable} ${allura.variable}`}>
+    <html lang="en" className={`${bricolage.variable} ${spaceMono.variable} ${fraunces.variable}`}>
       <body className="antialiased">
         <JsonLd data={siteJsonLd(settings)} />
         {children}
