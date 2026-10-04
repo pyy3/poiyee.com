@@ -85,19 +85,20 @@ export function WorkDetail({
     <div ref={rootRef}>
       <div data-progress className="fixed left-0 top-0 z-50 h-0.5 w-0 bg-accent" aria-hidden />
 
-      {/* top bar */}
-      <div className="fixed inset-x-0 top-0 z-40 flex items-center justify-between px-[clamp(22px,4vw,54px)] py-6 text-white mix-blend-difference">
-        <Link
-          href="/"
-          className="font-wordmark italic text-[24px] leading-none tracking-[-0.01em] text-white no-underline"
-          style={{ fontVariationSettings: '"opsz" 144, "wght" 400' }}
-        >
-          {title}
-        </Link>
-        <Link href="/#index" className="font-mono text-[11px] uppercase tracking-[0.2em] text-white no-underline hover:opacity-70">
-          ← Index of works
-        </Link>
-      </div>
+      {/* top bar — wordmark on a paper panel; the link blends (see Nav.tsx) */}
+      <Link
+        href="/"
+        className="fixed left-[clamp(22px,4vw,54px)] top-[18px] z-40 bg-paper/90 px-3.5 pb-2 pt-1.5 font-wordmark text-[24px] italic leading-none tracking-[-0.01em] text-ink no-underline shadow-[0_10px_30px_-18px_rgba(14,20,27,0.45)] backdrop-blur-sm"
+        style={{ fontVariationSettings: '"opsz" 144, "wght" 400' }}
+      >
+        {title}
+      </Link>
+      <Link
+        href="/#index"
+        className="fixed right-[clamp(22px,4vw,54px)] top-0 z-40 py-7 font-mono text-[11px] uppercase tracking-[0.2em] text-white no-underline mix-blend-difference hover:opacity-70"
+      >
+        ← Index of works
+      </Link>
 
       {/* HERO */}
       <header className="relative h-screen min-h-[620px] overflow-hidden">
