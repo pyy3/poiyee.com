@@ -36,6 +36,12 @@ export function WorkDetail({
   const { medium, year, heightCm, widthCm } = work;
   const dimensions = dimensionsLabel(work);
   const detail = work.media.find((m) => m.kind === 'detail') ?? work.media[1];
+  // The to-scale view needs the canvas alone, not a room shot: prefer a
+  // "Full canvas" photo, then anything that isn't an install view.
+  const canvas =
+    work.media.find((m) => m.kind === 'full') ??
+    work.media.find((m) => m.kind !== 'install') ??
+    work.media[0];
   const enquireHref = `/contact?kind=acquisition&work=${encodeURIComponent(work.slug)}`;
 
   useEffect(() => {
@@ -125,7 +131,7 @@ export function WorkDetail({
           <div className="relative">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={work.media[0].src}
+              src={canvas.src}
               alt={`${work.name}, full canvas`}
               className="w-full shadow-[0_50px_90px_-46px_rgba(14,20,27,0.5)]"
             />
@@ -177,6 +183,31 @@ export function WorkDetail({
               {detail.caption}
             </div>
           )}
+        </section>
+      )}
+
+      {/* EVERY PHOTO, UNCROPPED — the wall, easel and room are part of the work's presentation */}
+      {work.media.length > 1 && (
+        <section className="mx-auto max-w-[1300px] px-[clamp(22px,4vw,54px)] py-[8vh]">
+          <h2 className="mb-8 font-display text-[26px] font-semibold tracking-[-0.01em]">Views</h2>
+          <div className="columns-1 gap-6 sm:columns-2 lg:columns-3">
+            {work.media.map((m, i) => (
+              <figure key={m.src} className="mb-6 break-inside-avoid">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={`${m.src}?w=1200&auto=format`}
+                  alt={m.caption ? `${work.name} — ${m.caption}` : `${work.name}, view ${i + 1}`}
+                  loading="lazy"
+                  className="w-full"
+                />
+                {m.caption && (
+                  <figcaption className="mt-2 font-mono text-[10.5px] uppercase tracking-[0.16em] text-pencil">
+                    {m.caption}
+                  </figcaption>
+                )}
+              </figure>
+            ))}
+          </div>
         </section>
       )}
 
