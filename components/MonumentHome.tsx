@@ -105,9 +105,9 @@ export function MonumentHome({
       {/* vertical index rail */}
       <nav
         aria-label="Index of works"
-        className="fixed right-[clamp(14px,3vw,36px)] top-1/2 z-40 hidden -translate-y-1/2 flex-col items-end gap-3 md:flex"
+        className="fixed right-[clamp(14px,3vw,36px)] top-1/2 z-40 hidden -translate-y-1/2 flex-col items-end gap-[clamp(4px,1.4vh,12px)] md:flex"
       >
-        {works.slice(0, 12).map((w, i) => (
+        {works.map((w, i) => (
           <a
             key={w.slug}
             href={`#work-${i}`}
