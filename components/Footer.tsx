@@ -9,7 +9,7 @@ export async function Footer() {
   const commissionsSlug = await getCommissionsPageSlug();
   return (
     <footer id="contact" className="px-[clamp(22px,4vw,54px)] pb-[8vh] pt-[14vh]">
-      <div className="font-display text-[clamp(60px,15vw,240px)] font-extrabold leading-[0.82] tracking-[-0.04em]">
+      <div className="font-script text-[clamp(88px,20vw,320px)] font-normal leading-[1] pl-[0.1em]">
         {title}
       </div>
 

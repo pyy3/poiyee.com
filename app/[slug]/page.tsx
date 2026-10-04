@@ -4,7 +4,7 @@ import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 import { Headline } from '@/components/Headline';
 import { PageSections } from '@/components/PageSections';
-import { getSiteSettings, plainText } from '@/lib/content';
+import { getSiteSettings, plainText, sharedSocial } from '@/lib/content';
 import { getAllPages, getPage, pageLanguages, SITE_URL, type ContentPage } from '@/lib/pages';
 
 /* A content page from Sanity ("Pages" in Studio), e.g. /commissions.
@@ -22,27 +22,35 @@ const OG_LOCALE: Record<NonNullable<ContentPage['language']>, string> = { de: 'd
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const [page, { title: siteTitle }] = await Promise.all([getPage(slug), getSiteSettings()]);
+  const [page, settings] = await Promise.all([getPage(slug), getSiteSettings()]);
   if (!page) return {};
-  const title = page.seoTitle || [page.title, siteTitle].filter(Boolean).join(' — ') || undefined;
+  const title = page.seoTitle || [page.title, settings.title].filter(Boolean).join(' — ') || undefined;
   const description = page.seoDescription || plainText(page.intro) || undefined;
   const url = `${SITE_URL}/${page.slug}`;
   const languages = pageLanguages(page);
-  const images = page.heroImage ? [{ url: page.heroImage.src, alt: page.heroImage.alt }] : undefined;
+  // Start from the site-wide share card (Next replaces, not merges, a parent's
+  // openGraph), then let the page's own hero image take over when it has one.
+  const social = sharedSocial(settings, url);
+  const images = page.heroImage ? [{ url: page.heroImage.src, alt: page.heroImage.alt }] : social.openGraph.images;
   return {
     title,
     description,
     alternates: { canonical: url, languages },
     openGraph: {
+      ...social.openGraph,
       title,
       description,
       url,
-      type: 'website',
-      locale: page.language ? OG_LOCALE[page.language] : undefined,
+      locale: page.language ? OG_LOCALE[page.language] : social.openGraph.locale,
       alternateLocale: page.translation?.language ? [OG_LOCALE[page.translation.language]] : undefined,
       images,
     },
-    twitter: { title, description, images: images?.map((i) => i.url) },
+    twitter: {
+      ...social.twitter,
+      title,
+      description,
+      images: page.heroImage ? [page.heroImage.src] : social.twitter.images,
+    },
   };
 }
 

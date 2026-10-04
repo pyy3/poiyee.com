@@ -7,8 +7,8 @@
   --color-paper-deep: #F1F1EE;  /* image placeholder / recessed */
   --color-ink:        #0E141B;  /* near-black text */
   --color-pencil:     #8C9399;  /* muted labels */
-  --color-accent:     #2C6E93;  /* water blue */
-  --color-deep:       #123147;  /* deep-water band */
+  --color-accent:     #0047AB;  /* cobalt; 8.2:1 on paper */
+  --color-deep:       #0A2A6B;  /* deep cobalt band; white text 13.5:1 */
   --color-line:       #E4E3DE;  /* hairlines */
   --color-ochre:      #C18A3E;  /* warm sand */
   --color-sold:       #B3261E;  /* gallery red dot */
@@ -17,6 +17,7 @@
      Body text uses the system sans: the old Fontshare link for Neue Montreal
      returned an empty stylesheet, so it never loaded. */
   --font-display: var(--font-bricolage), system-ui, sans-serif;
+  --font-script:  var(--font-allura), cursive;  /* artist-name wordmark only */
   --font-body:    -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono:    var(--font-space-mono), ui-monospace, monospace;
 }

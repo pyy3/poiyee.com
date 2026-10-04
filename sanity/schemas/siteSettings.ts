@@ -143,6 +143,15 @@ export const siteSettings = defineType({
       description: 'Shown in search results and when the site is shared.',
     }),
     defineField({
+      name: 'artistSummary',
+      title: 'Artist summary',
+      type: 'text',
+      rows: 4,
+      group: 'seo',
+      description:
+        'Two or three plain sentences on who you are, where you work, what you paint and how to buy or commission. Search engines and AI assistants read this to describe you, and it heads /llms.txt. Also used as the home page description when "Description" is empty. Write facts, not slogans.',
+    }),
+    defineField({
       name: 'ogImage',
       title: 'Share image',
       type: 'image',
