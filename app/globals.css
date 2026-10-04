@@ -11,6 +11,7 @@
   --color-deep:       #123147;  /* deep-water band */
   --color-line:       #E4E3DE;  /* hairlines */
   --color-ochre:      #C18A3E;  /* warm sand */
+  --color-sold:       #B3261E;  /* gallery red dot */
 
   /* Bricolage Grotesque + Space Mono load via next/font (variables set in layout.tsx).
      Neue Montreal loads via Fontshare CDN — reference its family name directly. */
