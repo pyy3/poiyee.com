@@ -9,7 +9,10 @@ export async function Footer() {
   const commissionsSlug = await getCommissionsPageSlug();
   return (
     <footer id="contact" className="px-[clamp(22px,4vw,54px)] pb-[8vh] pt-[14vh]">
-      <div className="font-script text-[clamp(88px,20vw,320px)] font-normal leading-[1] pl-[0.1em]">
+      <div
+        className="font-wordmark italic text-[clamp(88px,20vw,320px)] leading-[1] tracking-[-0.03em]"
+        style={{ fontVariationSettings: '"opsz" 144, "wght" 320' }}
+      >
         {title}
       </div>
 

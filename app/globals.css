@@ -17,7 +17,7 @@
      Body text uses the system sans: the old Fontshare link for Neue Montreal
      returned an empty stylesheet, so it never loaded. */
   --font-display: var(--font-bricolage), system-ui, sans-serif;
-  --font-script:  var(--font-allura), cursive;  /* artist-name wordmark only */
+  --font-wordmark: var(--font-fraunces), Georgia, serif;  /* artist-name wordmark only */
   --font-body:    -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono:    var(--font-space-mono), ui-monospace, monospace;
 }
