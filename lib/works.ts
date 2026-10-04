@@ -94,7 +94,7 @@ export function workMeta(w: Work): string {
   return [w.medium, w.year, dimensionsLabel(w)].filter(Boolean).join(' · ');
 }
 
-export function dimensionsLabel(w: Work): string | undefined {
+export function dimensionsLabel(w: Pick<Work, 'heightCm' | 'widthCm'>): string | undefined {
   return w.heightCm && w.widthCm ? `${w.heightCm} × ${w.widthCm} cm` : undefined;
 }
 
