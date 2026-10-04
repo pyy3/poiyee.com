@@ -2,14 +2,31 @@
 
 import { useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { parseMeta, type Work } from '@/lib/works';
+import type { PortableTextBlock } from '@portabletext/react';
+import { workMeta, type Work } from '@/lib/works';
+import { Headline } from './Headline';
 
 /* The immersive homepage: a full-viewport hero, an intro band, and each work
    presented monumentally (edge-to-edge, with parallax and a scale annotation).
    A vertical index rail tracks progress and links into the sequence. */
-export function MonumentHome({ works }: { works: Work[] }) {
+export function MonumentHome({
+  works,
+  hero,
+  title,
+  headline,
+  tags,
+  intro,
+}: {
+  works: Work[];
+  hero?: Work;
+  title?: string;
+  headline?: PortableTextBlock[];
+  tags?: string[];
+  intro?: PortableTextBlock[];
+}) {
   const rootRef = useRef<HTMLDivElement>(null);
-  const heroImg = works[0]?.media[0]?.src ?? '/inspiration/22/art-28.jpeg';
+  const heroImg = hero?.media[0]?.src;
+  const heroTags = [title, ...(tags ?? [])].filter(Boolean);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -109,22 +126,23 @@ export function MonumentHome({ works }: { works: Work[] }) {
       {/* HERO */}
       <header className="relative h-screen min-h-[640px] overflow-hidden">
         <div data-parallax="0.16" className="absolute inset-x-0 -inset-y-[8%]">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={heroImg} alt="" className="h-[116%] w-full object-cover" />
+          {heroImg && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={heroImg} alt="" className="h-[116%] w-full object-cover" />
+          )}
         </div>
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[rgba(8,14,20,0.34)] via-transparent to-[rgba(8,14,20,0.55)]" />
         <div className="absolute inset-x-[clamp(22px,4vw,54px)] bottom-[clamp(30px,7vh,80px)] z-[3] text-white">
           <h1 className="font-display text-[clamp(52px,9.5vw,168px)] font-normal leading-[0.9] tracking-[-0.03em] text-balance">
-            Paintings the
-            <br />
-            size of <span className="font-extrabold">weather</span>.
+            <Headline value={headline} emphasis="font-extrabold" />
           </h1>
           <div className="mt-6 flex flex-wrap items-center gap-x-8 gap-y-2 font-mono text-[11px] uppercase tracking-[0.2em] opacity-95">
-            <span>poiyee</span>
-            <span className="h-px w-8 bg-current opacity-50" />
-            <span>Acrylic &amp; water on canvas</span>
-            <span className="h-px w-8 bg-current opacity-50" />
-            <span>Zürich</span>
+            {heroTags.map((t, i) => (
+              <span key={i} className="flex items-center gap-x-8">
+                {i > 0 && <span className="h-px w-8 bg-current opacity-50" />}
+                {t}
+              </span>
+            ))}
           </div>
         </div>
         <div className="absolute bottom-6 left-1/2 z-[3] -translate-x-1/2 font-mono text-[11px] uppercase tracking-[0.2em] text-white/80">
@@ -133,18 +151,18 @@ export function MonumentHome({ works }: { works: Work[] }) {
       </header>
 
       {/* INTRO BAND */}
-      <section className="max-w-[1200px] px-[clamp(22px,4vw,54px)] py-[22vh]">
-        <p className="font-display text-[clamp(28px,4vw,58px)] font-light leading-[1.14] tracking-[-0.02em]">
-          A practice in <span className="font-semibold text-accent">pigment, weight and water</span>{' '}
-          — surfaces built up in palette-knife layers until the canvas itself begins to remember the
-          sea.
-        </p>
-      </section>
+      {intro && (
+        <section className="max-w-[1200px] px-[clamp(22px,4vw,54px)] py-[22vh]">
+          <p className="font-display text-[clamp(28px,4vw,58px)] font-light leading-[1.14] tracking-[-0.02em]">
+            <Headline value={intro} emphasis="font-semibold text-accent" />
+          </p>
+        </section>
+      )}
 
       {/* WORKS */}
       <section id="index" aria-label="Index of works">
         {works.map((w, i) => {
-          const { medium, year, dimensions, widthCm } = parseMeta(w.meta);
+          const { widthCm } = w;
           const barPx = Math.round(120 + (((widthCm ?? 120) - 90) / 120) * 120);
           return (
             <article
@@ -194,7 +212,7 @@ export function MonumentHome({ works }: { works: Work[] }) {
                     )}
                   </Link>
                   <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.18em] opacity-85">
-                    {[medium, year, dimensions].filter(Boolean).join(' · ')}
+                    {workMeta(w)}
                   </div>
                   <Link
                     href={`/work/${w.slug}`}

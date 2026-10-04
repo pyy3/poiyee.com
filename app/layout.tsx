@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Bricolage_Grotesque, Space_Mono } from 'next/font/google';
 import './globals.css';
+import { getSiteSettings } from '@/lib/content';
 
 const bricolage = Bricolage_Grotesque({
   variable: '--font-bricolage',
@@ -16,45 +17,47 @@ const spaceMono = Space_Mono({
   display: 'swap',
 });
 
-export const metadata: Metadata = {
-  title: 'poiyee — paintings',
-  description: 'Paintings by poiyee. Acrylic on canvas. Lyrical seascapes and landscapes.',
-  metadataBase: new URL('https://poiyee.com'),
-  manifest: '/manifest.webmanifest',
-  applicationName: 'poiyee',
-  appleWebApp: {
-    capable: true,
-    title: 'poiyee',
-    statusBarStyle: 'default',
-  },
-  icons: {
-    icon: [
-      { url: '/icons/icon-32.png', sizes: '32x32', type: 'image/png' },
-      { url: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
-    ],
-    apple: '/icons/icon-180.png',
-    shortcut: '/favicon.ico',
-  },
-  openGraph: {
-    title: 'poiyee — paintings',
-    description:
-      'A practice in pigment, weight and water. Acrylic on canvas. Studio in Zurich, Switzerland.',
-    type: 'website',
-    siteName: 'poiyee',
-    url: 'https://poiyee.com',
-    locale: 'en_US',
-    images: [
-      { url: '/icons/og.png', width: 1200, height: 630, alt: 'poiyee — paintings' },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'poiyee — paintings',
-    description:
-      'A practice in pigment, weight and water. Acrylic on canvas. Studio in Zurich, Switzerland.',
-    images: ['/icons/og.png'],
-  },
-};
+/* Title, description and share image come from Site settings in Sanity.
+   Icons and the manifest are site assets and stay in /public. */
+export async function generateMetadata(): Promise<Metadata> {
+  const { title, seoTitle, seoDescription, ogImage } = await getSiteSettings();
+  const images = ogImage ? [{ url: ogImage, width: 1200, height: 630, alt: seoTitle }] : undefined;
+  return {
+    title: seoTitle,
+    description: seoDescription,
+    metadataBase: new URL('https://poiyee.com'),
+    manifest: '/manifest.webmanifest',
+    applicationName: title,
+    appleWebApp: {
+      capable: true,
+      title,
+      statusBarStyle: 'default',
+    },
+    icons: {
+      icon: [
+        { url: '/icons/icon-32.png', sizes: '32x32', type: 'image/png' },
+        { url: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
+      ],
+      apple: '/icons/icon-180.png',
+      shortcut: '/favicon.ico',
+    },
+    openGraph: {
+      title: seoTitle,
+      description: seoDescription,
+      type: 'website',
+      siteName: title,
+      url: 'https://poiyee.com',
+      locale: 'en_US',
+      images,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: seoTitle,
+      description: seoDescription,
+      images: ogImage ? [ogImage] : undefined,
+    },
+  };
+}
 
 export const viewport: Viewport = {
   themeColor: '#FCFCFB',

@@ -2,7 +2,9 @@
 
 import { useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { parseMeta, type Work } from '@/lib/works';
+import type { PortableTextBlock } from '@portabletext/react';
+import { dimensionsLabel, type Work } from '@/lib/works';
+import { Headline, Prose } from './Headline';
 
 type Props = {
   work: Work;
@@ -10,16 +12,30 @@ type Props = {
   next: Work;
   index: number;
   total: number;
+  title?: string;
+  studioLocation?: string;
+  acquireHeading?: PortableTextBlock[];
+  acquireText?: string;
 };
 
 /* A single work, presented monumentally: full-bleed hero, the complete canvas
    shown to scale, a short statement, a texture detail, specifications, and a
    prompt to enquire. Parallax + progress handled client-side. */
-export function WorkDetail({ work, prev, next, index, total }: Props) {
+export function WorkDetail({
+  work,
+  prev,
+  next,
+  index,
+  total,
+  title,
+  studioLocation,
+  acquireHeading,
+  acquireText,
+}: Props) {
   const rootRef = useRef<HTMLDivElement>(null);
-  const { medium, year, dimensions, widthCm } = parseMeta(work.meta);
-  const heightCm = dimensions ? Number(dimensions.match(/×\s*(\d+)/)?.[1]) : undefined;
-  const detailSrc = work.media[1]?.src ?? work.media[0].src;
+  const { medium, year, heightCm, widthCm } = work;
+  const dimensions = dimensionsLabel(work);
+  const detail = work.media.find((m) => m.kind === 'detail') ?? work.media[1];
   const enquireHref = `/contact?kind=acquisition&work=${encodeURIComponent(work.slug)}`;
 
   useEffect(() => {
@@ -65,7 +81,7 @@ export function WorkDetail({ work, prev, next, index, total }: Props) {
       {/* top bar */}
       <div className="fixed inset-x-0 top-0 z-40 flex items-center justify-between px-[clamp(22px,4vw,54px)] py-6 text-white mix-blend-difference">
         <Link href="/" className="font-display text-[22px] font-extrabold tracking-[-0.02em] text-white no-underline">
-          poiyee
+          {title}
         </Link>
         <Link href="/#index" className="font-mono text-[11px] uppercase tracking-[0.2em] text-white no-underline hover:opacity-70">
           ← Index of works
@@ -98,10 +114,11 @@ export function WorkDetail({ work, prev, next, index, total }: Props) {
       </header>
 
       {/* THE COMPLETE WORK, TO SCALE */}
+      {heightCm && widthCm && (
       <section className="px-[clamp(22px,4vw,54px)] pb-[12vh] pt-[16vh]">
         <div className="mx-auto grid max-w-[1200px] grid-cols-1 items-end gap-x-[clamp(28px,5vw,72px)] md:grid-cols-[auto_1fr]">
           <div className="hidden flex-col items-center self-stretch font-mono text-[10px] uppercase tracking-[0.16em] text-pencil md:flex">
-            <span>{heightCm ?? 240}</span>
+            <span>{heightCm}</span>
             <span className="relative my-2 w-px flex-1 bg-line before:absolute before:left-[-4px] before:top-0 before:h-px before:w-[9px] before:bg-pencil after:absolute after:bottom-0 after:left-[-4px] after:h-px after:w-[9px] after:bg-pencil" />
             <span>cm</span>
           </div>
@@ -128,64 +145,66 @@ export function WorkDetail({ work, prev, next, index, total }: Props) {
           <div className="mt-4 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.16em] text-pencil">
             <span>0</span>
             <span className="relative h-px flex-1 bg-line before:absolute before:left-0 before:top-[-4px] before:h-[9px] before:w-px before:bg-pencil after:absolute after:right-0 after:top-[-4px] after:h-[9px] after:w-px after:bg-pencil" />
-            <span>{widthCm ?? 180} cm</span>
+            <span>{widthCm} cm</span>
           </div>
         </div>
       </section>
+      )}
 
       {/* STATEMENT */}
-      <section className="mx-auto max-w-[900px] px-[clamp(22px,4vw,54px)] py-[8vh]">
-        <p className="font-display text-[clamp(24px,3.2vw,42px)] font-light leading-[1.22] tracking-[-0.015em]">
-          Built up over weeks in <span className="text-accent">palette-knife layers</span>, until the
-          canvas itself begins to remember the sea.
-        </p>
-        <p className="mt-6 text-[18px] leading-[1.7] text-ink/80">
-          {work.name} holds the light of a single passage — the moment the far shore has dropped away
-          and the near one hasn&apos;t yet arrived. poiyee works the surface wet-into-wet, then drags
-          pigment back with the blade so the weave of the linen reads through like foam. Seen close, it
-          dissolves into weather; seen from across the room, it resolves again into water.
-        </p>
-      </section>
+      {(work.lede || work.description) && (
+        <section className="mx-auto max-w-[900px] px-[clamp(22px,4vw,54px)] py-[8vh]">
+          {work.lede && (
+            <p className="mb-6 font-display text-[clamp(24px,3.2vw,42px)] font-light leading-[1.22] tracking-[-0.015em]">
+              <Headline value={work.lede} emphasis="text-accent" />
+            </p>
+          )}
+          <div className="space-y-5">
+            <Prose value={work.description} className="text-[18px] leading-[1.7] text-ink/80" />
+          </div>
+        </section>
+      )}
 
       {/* DETAIL CROP */}
-      <section className="relative my-[6vh] h-[86vh] min-h-[520px] overflow-hidden">
-        <div data-parallax="0.12" className="absolute inset-x-0 -inset-y-[8%]">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={detailSrc} alt={`${work.name} — detail`} className="h-[116%] w-full object-cover" />
-        </div>
-        <div className="absolute bottom-7 left-[clamp(22px,4vw,54px)] font-mono text-[11px] uppercase tracking-[0.18em] text-white mix-blend-difference">
-          Detail · palette-knife texture
-        </div>
-      </section>
+      {detail && (
+        <section className="relative my-[6vh] h-[86vh] min-h-[520px] overflow-hidden">
+          <div data-parallax="0.12" className="absolute inset-x-0 -inset-y-[8%]">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={detail.src} alt={`${work.name} — detail`} className="h-[116%] w-full object-cover" />
+          </div>
+          {detail.caption && (
+            <div className="absolute bottom-7 left-[clamp(22px,4vw,54px)] font-mono text-[11px] uppercase tracking-[0.18em] text-white mix-blend-difference">
+              {detail.caption}
+            </div>
+          )}
+        </section>
+      )}
 
       {/* SPECIFICATIONS */}
       <section className="mx-auto max-w-[1000px] px-[clamp(22px,4vw,54px)] py-[6vh]">
         <h2 className="mb-8 font-display text-[26px] font-semibold tracking-[-0.01em]">Specifications</h2>
         <dl className="grid grid-cols-1 md:grid-cols-2 md:gap-x-16">
-          <Spec label="Medium">{medium}</Spec>
-          <Spec label="Year">{year ?? '—'}</Spec>
-          <Spec label="Dimensions">{dimensions ?? '—'}</Spec>
+          {medium && <Spec label="Medium">{medium}</Spec>}
+          {year && <Spec label="Year">{year}</Spec>}
+          {dimensions && <Spec label="Dimensions">{dimensions}</Spec>}
           <Spec label="Orientation">{work.orient === 'landscape' ? 'Landscape' : 'Portrait'}</Spec>
-          <Spec label="Edition">Original · 1 of 1</Spec>
-          <Spec label="Framing">Unframed, ready to hang</Spec>
+          {work.editionInfo && <Spec label="Edition">{work.editionInfo}</Spec>}
+          {work.framing && <Spec label="Framing">{work.framing}</Spec>}
           <Spec label="Availability">
             <span className={work.isSold ? 'text-pencil' : 'text-accent'}>
               {work.isSold ? 'Sold' : 'Available'}
             </span>
           </Spec>
-          <Spec label="Studio">Zürich, Switzerland</Spec>
+          {studioLocation && <Spec label="Studio">{studioLocation}</Spec>}
         </dl>
       </section>
 
       {/* ENQUIRE */}
       <section className="bg-deep px-[clamp(22px,4vw,54px)] py-[14vh] text-center text-white">
         <h3 className="font-display text-[clamp(30px,5vw,64px)] font-light leading-none tracking-[-0.02em]">
-          Take <span className="font-extrabold">this one</span> home.
+          <Headline value={acquireHeading} emphasis="font-extrabold" />
         </h3>
-        <p className="mx-auto mt-6 max-w-[44ch] text-white/75">
-          Originals and small archival editions. Shipping worldwide, crated and packed by hand from the
-          Zürich studio.
-        </p>
+        {acquireText && <p className="mx-auto mt-6 max-w-[44ch] text-white/75">{acquireText}</p>}
         <Link
           href={enquireHref}
           className="mt-9 inline-block rounded-full bg-white px-7 py-3.5 font-mono text-[12px] uppercase tracking-[0.16em] text-deep no-underline hover:bg-accent hover:text-white"

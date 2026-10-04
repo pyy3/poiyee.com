@@ -1,11 +1,13 @@
 import Link from 'next/link';
+import { getSiteSettings } from '@/lib/content';
 
 /* Footer — an oversized wordmark and a plain link ledger. */
-export function Footer() {
+export async function Footer() {
+  const { title, contactEmail, instagram, newsletter, footerLine } = await getSiteSettings();
   return (
     <footer id="contact" className="px-[clamp(22px,4vw,54px)] pb-[8vh] pt-[14vh]">
       <div className="font-display text-[clamp(60px,15vw,240px)] font-extrabold leading-[0.82] tracking-[-0.04em]">
-        poiyee
+        {title}
       </div>
 
       <div className="mt-12 grid grid-cols-2 gap-8 border-t border-line pt-10 sm:grid-cols-4">
@@ -19,19 +21,21 @@ export function Footer() {
           <FooterLink href="/contact?kind=commission">Commission</FooterLink>
           <FooterLink href="/contact?kind=studio-visit">Studio visit</FooterLink>
         </FooterCol>
-        <FooterCol title="Contact">
-          <FooterLink href="mailto:hello@poiyee.com">hello@poiyee.com</FooterLink>
-          <FooterLink href="#">Instagram</FooterLink>
-          <FooterLink href="#">Newsletter</FooterLink>
-        </FooterCol>
+        {(contactEmail || instagram || newsletter) && (
+          <FooterCol title="Contact">
+            {contactEmail && <FooterLink href={`mailto:${contactEmail}`}>{contactEmail}</FooterLink>}
+            {instagram && <FooterLink href={instagram}>Instagram</FooterLink>}
+            {newsletter && <FooterLink href={newsletter}>Newsletter</FooterLink>}
+          </FooterCol>
+        )}
         <FooterCol title="Studio">
           <FooterLink href="/studio">Content studio →</FooterLink>
         </FooterCol>
       </div>
 
       <div className="mt-14 flex flex-wrap justify-between gap-4 font-mono text-[10.5px] uppercase tracking-[0.2em] text-pencil">
-        <span>© {new Date().getFullYear()} poiyee · All works</span>
-        <span>Zürich — and from there, by post</span>
+        <span>© {new Date().getFullYear()} {title} · All works</span>
+        {footerLine && <span>{footerLine}</span>}
       </div>
     </footer>
   );

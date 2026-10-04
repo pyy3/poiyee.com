@@ -7,6 +7,7 @@ export const artwork = defineType({
   fieldsets: [
     { name: 'meta', title: 'Catalogue', options: { columns: 2 } },
     { name: 'physical', title: 'Physical work', options: { columns: 3 } },
+    { name: 'details', title: 'Edition & framing', options: { columns: 2 } },
     { name: 'store', title: 'Acquisition', options: { columns: 2 } },
   ],
   fields: [
@@ -64,6 +65,12 @@ export const artwork = defineType({
       options: { columns: 3 },
     }),
     defineField({
+      name: 'lede',
+      title: 'Statement lede',
+      type: 'headline',
+      description: 'Optional large opening line above the statement. Bold words are set in the accent colour.',
+    }),
+    defineField({
       name: 'description',
       title: 'Statement',
       type: 'array',
@@ -73,7 +80,7 @@ export const artwork = defineType({
     defineField({
       name: 'media',
       title: 'Media',
-      description: 'Photos and videos of this painting. The first item marked “Primary” is the gallery thumbnail.',
+      description: 'Photos of this painting. The photo marked “Primary” (or else the first) is the main image; the first “Detail crop” is shown as the close-up on its page.',
       type: 'array',
       validation: (r) => r.min(1),
       of: [
@@ -126,6 +133,22 @@ export const artwork = defineType({
       ],
     }),
     defineField({
+      name: 'editionInfo',
+      title: 'Edition',
+      type: 'string',
+      fieldset: 'details',
+      description: 'e.g. "Original · 1 of 1" or "Edition of 5". Empty: the row is hidden.',
+      initialValue: 'Original · 1 of 1',
+    }),
+    defineField({
+      name: 'framing',
+      title: 'Framing',
+      type: 'string',
+      fieldset: 'details',
+      description: 'e.g. "Unframed, ready to hang". Empty: the row is hidden.',
+      initialValue: 'Unframed, ready to hang',
+    }),
+    defineField({
       name: 'isAvailable',
       title: 'Available for acquisition',
       type: 'boolean',
@@ -154,14 +177,6 @@ export const artwork = defineType({
       fieldset: 'store',
       options: { list: ['INR', 'USD', 'EUR', 'GBP'], layout: 'radio' },
       initialValue: 'INR',
-      hidden: ({ document }) => !document?.isAvailable,
-    }),
-    defineField({
-      name: 'editionInfo',
-      title: 'Edition info',
-      type: 'string',
-      fieldset: 'store',
-      description: 'e.g. "Original, 1 of 1" or "Edition of 5"',
       hidden: ({ document }) => !document?.isAvailable,
     }),
     defineField({

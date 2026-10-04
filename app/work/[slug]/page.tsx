@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { WorkDetail } from '@/components/WorkDetail';
 import { Footer } from '@/components/Footer';
-import { getAllWorks, getWorkWithNeighbours } from '@/lib/works';
+import { getAllWorks, getWorkWithNeighbours, workMeta } from '@/lib/works';
+import { getSiteSettings } from '@/lib/content';
 
 export const revalidate = 60;
 
@@ -17,15 +18,16 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const data = await getWorkWithNeighbours(slug);
-  if (!data) return { title: 'Work — poiyee' };
+  const [data, { title }] = await Promise.all([getWorkWithNeighbours(slug), getSiteSettings()]);
+  if (!data) return {};
   const { work } = data;
+  const pageTitle = [work.name, title].filter(Boolean).join(' — ');
   return {
-    title: `${work.name} — poiyee`,
-    description: work.meta,
+    title: pageTitle,
+    description: workMeta(work),
     openGraph: {
-      title: `${work.name} — poiyee`,
-      description: work.meta,
+      title: pageTitle,
+      description: workMeta(work),
       images: [{ url: work.media[0].src }],
     },
   };
@@ -33,7 +35,7 @@ export async function generateMetadata({
 
 export default async function WorkPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const data = await getWorkWithNeighbours(slug);
+  const [data, settings] = await Promise.all([getWorkWithNeighbours(slug), getSiteSettings()]);
   if (!data) notFound();
 
   return (
@@ -44,6 +46,10 @@ export default async function WorkPage({ params }: { params: Promise<{ slug: str
         next={data.next}
         index={data.index}
         total={data.total}
+        title={settings.title}
+        studioLocation={settings.studioLocation}
+        acquireHeading={settings.acquireDetailHeading}
+        acquireText={settings.acquireText}
       />
       <Footer />
     </main>
