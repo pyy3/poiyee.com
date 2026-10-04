@@ -194,29 +194,30 @@ export function MonumentHome({
                 </div>
               )}
 
-              {/* caption */}
-              <div className="pointer-events-none absolute inset-x-[clamp(22px,4vw,54px)] bottom-[6vh] z-[3] flex items-end justify-between text-white mix-blend-difference">
-                <div className="font-display text-[clamp(64px,12vw,190px)] font-light leading-[0.8] tracking-[-0.04em]">
+              {/* caption: the number blends with the image; the name sits on a
+                  paper panel so it stays legible over light and busy paintings */}
+              <div className="pointer-events-none absolute inset-x-[clamp(22px,4vw,54px)] bottom-[6vh] z-[3] flex items-end justify-between gap-6">
+                <div className="font-display text-[clamp(64px,12vw,190px)] font-light leading-[0.8] tracking-[-0.04em] text-white mix-blend-difference">
                   {String(i + 1).padStart(2, '0')}
                 </div>
-                <div className="pointer-events-auto text-right">
+                <div className="pointer-events-auto max-w-[min(520px,70%)] bg-paper/90 px-5 py-4 text-right text-ink shadow-[0_18px_40px_-24px_rgba(14,20,27,0.45)] backdrop-blur-sm">
                   <Link
                     href={`/work/${w.slug}`}
-                    className="font-display text-[clamp(22px,2.6vw,38px)] font-semibold leading-[1.05] tracking-[-0.01em] text-white no-underline"
+                    className="font-display text-[clamp(22px,2.6vw,38px)] font-semibold leading-[1.05] tracking-[-0.01em] text-ink no-underline"
                   >
                     {w.name}
                     {w.isSold && (
-                      <span className="ml-3 align-middle font-mono text-[11px] tracking-[0.2em]">
+                      <span className="ml-3 whitespace-nowrap align-middle font-mono text-[11px] tracking-[0.2em] text-pencil">
                         · Sold
                       </span>
                     )}
                   </Link>
-                  <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.18em] opacity-85">
+                  <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.18em] text-ink/70">
                     {workMeta(w)}
                   </div>
                   <Link
                     href={`/work/${w.slug}`}
-                    className="mt-3 inline-block border-b border-white/50 pb-0.5 font-mono text-[11px] uppercase tracking-[0.18em] text-white no-underline hover:border-white"
+                    className="mt-3 inline-block border-b border-ink/40 pb-0.5 font-mono text-[11px] uppercase tracking-[0.18em] text-ink no-underline hover:border-accent hover:text-accent"
                   >
                     View work →
                   </Link>
