@@ -15,6 +15,8 @@ export type Media = {
 export type Work = {
   /** Sanity document id. */
   docId: string;
+  /** Last edit in Sanity (ISO timestamp). */
+  updatedAt: string;
   id: string;
   slug: string;
   name: string;
@@ -35,6 +37,7 @@ export type Work = {
 
 type SanityArtwork = {
   _id: string;
+  _updatedAt: string;
   title?: string;
   slug?: string;
   number?: number;
@@ -63,6 +66,7 @@ function transform(a: SanityArtwork): Work {
 
   return {
     docId: a._id,
+    updatedAt: a._updatedAt,
     id: a.number ? String(a.number).padStart(2, '0') : a._id.slice(-4),
     slug: a.slug || a._id,
     name: a.title || 'Untitled',
