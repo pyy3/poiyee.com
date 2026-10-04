@@ -3,17 +3,20 @@ import { notFound } from 'next/navigation';
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 import { Prose } from '@/components/Headline';
-import { getPrivacy, getSiteSettings } from '@/lib/content';
+import { getPrivacy, getSiteSettings, sharedSocial } from '@/lib/content';
 
 export const revalidate = 60;
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { title } = await getSiteSettings();
+  const settings = await getSiteSettings();
+  const { title } = settings;
+  const social = sharedSocial(settings, 'https://poiyee.com/privacy');
   const pageTitle = ['Privacy', title].filter(Boolean).join(' — ');
   return {
     title: pageTitle,
-    openGraph: { title: pageTitle, url: 'https://poiyee.com/privacy' },
-    twitter: { title: pageTitle },
+    alternates: { canonical: '/privacy' },
+    openGraph: { ...social.openGraph, title: pageTitle },
+    twitter: { ...social.twitter, title: pageTitle },
   };
 }
 
