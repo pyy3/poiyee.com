@@ -13,9 +13,10 @@
   --color-ochre:      #C18A3E;  /* warm sand */
 
   /* Bricolage Grotesque + Space Mono load via next/font (variables set in layout.tsx).
-     Neue Montreal loads via Fontshare CDN — reference its family name directly. */
+     Body text uses the system sans: the old Fontshare link for Neue Montreal
+     returned an empty stylesheet, so it never loaded. */
   --font-display: var(--font-bricolage), system-ui, sans-serif;
-  --font-body:    "Neue Montreal", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body:    -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono:    var(--font-space-mono), ui-monospace, monospace;
 }
 

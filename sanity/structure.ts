@@ -1,7 +1,7 @@
 import type { StructureResolver } from 'sanity/structure';
 
-// Two of our document types are singletons (only one instance).
-const SINGLETONS = ['about', 'siteSettings'];
+// These document types are singletons (only one instance).
+const SINGLETONS = ['about', 'siteSettings', 'privacy'];
 
 export const structure: StructureResolver = (S) =>
   S.list()
@@ -15,6 +15,10 @@ export const structure: StructureResolver = (S) =>
         .title('About page')
         .id('about')
         .child(S.document().schemaType('about').documentId('about')),
+      S.listItem()
+        .title('Privacy page')
+        .id('privacy')
+        .child(S.document().schemaType('privacy').documentId('privacy')),
       S.divider(),
       S.documentTypeListItem('artwork').title('Artworks'),
       S.documentTypeListItem('exhibition').title('Exhibitions'),

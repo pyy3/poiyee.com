@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Bricolage_Grotesque, Space_Mono } from 'next/font/google';
 import './globals.css';
 import { getSiteSettings } from '@/lib/content';
+import { ConsentBanner } from '@/components/ConsentBanner';
 
 const bricolage = Bricolage_Grotesque({
   variable: '--font-bricolage',
@@ -64,17 +65,14 @@ export const viewport: Viewport = {
   colorScheme: 'light',
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const { consentText } = await getSiteSettings();
   return (
     <html lang="en" className={`${bricolage.variable} ${spaceMono.variable}`}>
-      <head>
-        <link rel="preconnect" href="https://api.fontshare.com" crossOrigin="" />
-        <link
-          rel="stylesheet"
-          href="https://api.fontshare.com/v2/css?f[]=neue-montreal@400,500&display=swap"
-        />
-      </head>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        {children}
+        <ConsentBanner text={consentText} />
+      </body>
     </html>
   );
 }

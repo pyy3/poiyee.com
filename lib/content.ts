@@ -5,7 +5,7 @@
 import { cache } from 'react';
 import type { PortableTextBlock } from '@portabletext/react';
 import { client } from '@/sanity/lib/client';
-import { aboutQuery, siteSettingsQuery } from '@/sanity/lib/queries';
+import { aboutQuery, privacyQuery, siteSettingsQuery } from '@/sanity/lib/queries';
 
 export type SiteSettings = {
   title?: string;
@@ -26,6 +26,7 @@ export type SiteSettings = {
   seoTitle?: string;
   seoDescription?: string;
   ogImage?: string;
+  consentText?: string;
 };
 
 export type About = {
@@ -47,6 +48,12 @@ export const getAbout = cache(async (): Promise<About> => {
   if (!a) console.warn('[content] No "about" document in Sanity; the About section is hidden.');
   return a ?? {};
 });
+
+export type Privacy = { title?: string; updated?: string; body?: PortableTextBlock[] };
+
+export const getPrivacy = cache(async (): Promise<Privacy | null> =>
+  client.fetch<Privacy | null>(privacyQuery, {}, opts),
+);
 
 export const hasText = (blocks?: PortableTextBlock[]) =>
   !!blocks?.some((b) => Array.isArray(b.children) && b.children.some((c) => c.text?.trim()));

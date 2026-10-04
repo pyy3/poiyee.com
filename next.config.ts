@@ -11,7 +11,7 @@ const withPWA = withPWAInit({
   workboxOptions: {
     // Don't cache the heavy Studio bundle for offline.
     maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
-    navigateFallbackDenylist: [/^\/studio/, /^\/api\//],
+    navigateFallbackDenylist: [/^\/studio/, /^\/api\//, /^\/ingest\//],
     runtimeCaching: [
       {
         urlPattern: /\.(?:jpg|jpeg|png|webp|avif|svg)$/i,
@@ -29,19 +29,20 @@ const withPWA = withPWAInit({
           expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 30 },
         },
       },
-      {
-        urlPattern: /^https:\/\/api\.fontshare\.com\/.*/i,
-        handler: 'CacheFirst',
-        options: {
-          cacheName: 'fonts',
-          expiration: { maxEntries: 10, maxAgeSeconds: 60 * 60 * 24 * 365 },
-        },
-      },
     ],
   },
 });
 
 const nextConfig: NextConfig = {
+  // PostHog via our own domain (see instrumentation-client.ts), EU region.
+  async rewrites() {
+    return [
+      { source: '/ingest/static/:path*', destination: 'https://eu-assets.i.posthog.com/static/:path*' },
+      { source: '/ingest/array/:path*', destination: 'https://eu-assets.i.posthog.com/array/:path*' },
+      { source: '/ingest/:path*', destination: 'https://eu.i.posthog.com/:path*' },
+    ];
+  },
+  skipTrailingSlashRedirect: true,
   images: {
     formats: ['image/avif', 'image/webp'],
     remotePatterns: [

@@ -10,6 +10,7 @@ export const siteSettings = defineType({
     { name: 'acquire', title: 'Acquire' },
     { name: 'contact', title: 'Contact' },
     { name: 'seo', title: 'Sharing & search' },
+    { name: 'privacy', title: 'Cookies' },
   ],
   fields: [
     // General
@@ -138,6 +139,16 @@ export const siteSettings = defineType({
       type: 'image',
       group: 'seo',
       description: 'Shown when the site is shared on social media or in messages. 1200 × 630 works best.',
+    }),
+
+    // Cookies
+    defineField({
+      name: 'consentText',
+      title: 'Cookie banner text',
+      type: 'text',
+      rows: 3,
+      group: 'privacy',
+      description: 'Shown in the cookie banner next to Accept / Reject. A "Privacy" link is added after it.',
     }),
   ],
   preview: { prepare: () => ({ title: 'Site settings' }) },

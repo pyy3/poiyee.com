@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { getSiteSettings } from '@/lib/content';
+import { CookieSettingsButton } from './ConsentBanner';
 
 /* Footer — an oversized wordmark and a plain link ledger. */
 export async function Footer() {
@@ -36,6 +37,12 @@ export async function Footer() {
       <div className="mt-14 flex flex-wrap justify-between gap-4 font-mono text-[10.5px] uppercase tracking-[0.2em] text-pencil">
         <span>© {new Date().getFullYear()} {title} · All works</span>
         {footerLine && <span>{footerLine}</span>}
+        <span className="flex gap-6">
+          <Link href="/privacy" className="text-pencil no-underline hover:text-accent">
+            Privacy
+          </Link>
+          <CookieSettingsButton className="cursor-pointer border-0 bg-transparent p-0 uppercase tracking-[inherit] text-pencil hover:text-accent" />
+        </span>
       </div>
     </footer>
   );
