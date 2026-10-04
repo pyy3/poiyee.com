@@ -5,5 +5,6 @@ import { post } from './post';
 import { siteSettings } from './siteSettings';
 import { inquiry } from './inquiry';
 import { headline } from './headline';
+import { privacy } from './privacy';
 
-export const schemaTypes = [artwork, about, exhibition, post, siteSettings, inquiry, headline];
+export const schemaTypes = [artwork, about, exhibition, post, siteSettings, inquiry, headline, privacy];

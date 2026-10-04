@@ -47,12 +47,17 @@ export const siteSettingsQuery = groq`
     contactText,
     seoTitle,
     seoDescription,
-    "ogImage": ogImage.asset->url
+    "ogImage": ogImage.asset->url,
+    consentText
   }
 `;
 
 export const aboutQuery = groq`
   *[_type == "about" && _id == "about"][0]{ statement, bio, facts[]{ _key, label, value } }
+`;
+
+export const privacyQuery = groq`
+  *[_type == "privacy" && _id == "privacy"][0]{ title, updated, body }
 `;
 
 export const allExhibitionsQuery = groq`
