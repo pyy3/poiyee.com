@@ -95,7 +95,7 @@ export function WorkDetail({
           <img src={work.media[0].src} alt={work.name} className="h-[116%] w-full object-cover" />
         </div>
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[rgba(8,14,20,0.3)] via-transparent to-[rgba(8,14,20,0.6)]" />
-        <div className="absolute inset-x-[clamp(22px,4vw,54px)] bottom-[clamp(30px,7vh,72px)] z-[3] text-white">
+        <div className="absolute left-[clamp(22px,4vw,54px)] bottom-[clamp(30px,7vh,72px)] z-[3] max-w-[calc(100%-2*clamp(22px,4vw,54px))] bg-ink/55 px-[clamp(18px,2.4vw,32px)] py-[clamp(16px,2.2vw,28px)] text-white backdrop-blur-sm">
           <div className="mb-4 font-mono text-[11px] uppercase tracking-[0.2em] opacity-90">
             Work № {String(index + 1).padStart(2, '0')} · {work.isSold ? 'Sold' : 'Available'}
           </div>
