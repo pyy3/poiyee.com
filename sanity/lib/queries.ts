@@ -1,65 +1,58 @@
 import { groq } from 'next-sanity';
 
-export const allArtworksQuery = groq`
-  *[_type == "artwork"] | order(displayOrder asc, year desc) {
-    _id,
-    title,
-    "slug": slug.current,
-    number,
-    year,
-    medium,
-    dimensions,
-    isAvailable,
-    price,
-    priceCurrency,
-    editionInfo,
-    "primary": media[isPrimary == true][0]{ image, caption } ,
-    "media": media[]{
-      _key,
-      "src": image.asset->url,
-      "lqip": image.asset->metadata.lqip,
-      "dimensions": image.asset->metadata.dimensions,
-      caption,
-      kind,
-      isPrimary
-    },
-    description
+const artworkFields = groq`
+  _id,
+  title,
+  "slug": slug.current,
+  number,
+  year,
+  medium,
+  dimensions,
+  isSold,
+  editionInfo,
+  framing,
+  lede,
+  description,
+  "media": media[defined(image.asset)]{
+    _key,
+    "src": image.asset->url,
+    "dimensions": image.asset->metadata.dimensions,
+    caption,
+    kind,
+    isPrimary
   }
 `;
 
-export const artworkBySlugQuery = groq`
-  *[_type == "artwork" && slug.current == $slug][0]{
-    _id,
+export const allArtworksQuery = groq`
+  *[_type == "artwork" && count(media[defined(image.asset)]) > 0]
+    | order(coalesce(displayOrder, 9999) asc, year desc) { ${artworkFields} }
+`;
+
+export const siteSettingsQuery = groq`
+  *[_type == "siteSettings" && _id == "siteSettings"][0]{
     title,
-    "slug": slug.current,
-    number,
-    year,
-    medium,
-    dimensions,
-    isAvailable,
-    price,
-    priceCurrency,
-    editionInfo,
-    description,
-    stripePriceId,
-    "media": media[]{
-      _key,
-      "src": image.asset->url,
-      "lqip": image.asset->metadata.lqip,
-      "dimensions": image.asset->metadata.dimensions,
-      caption,
-      kind,
-      isPrimary
-    }
+    studioLocation,
+    contactEmail,
+    instagram,
+    newsletter,
+    footerLine,
+    heroHeadline,
+    heroTags,
+    "heroArtworkId": heroArtwork._ref,
+    intro,
+    acquireHeading,
+    acquireDetailHeading,
+    acquireText,
+    contactHeading,
+    contactText,
+    seoTitle,
+    seoDescription,
+    "ogImage": ogImage.asset->url
   }
 `;
 
 export const aboutQuery = groq`
-  *[_type == "about"][0]{
-    bio,
-    facts,
-    "portrait": portrait.asset->url
-  }
+  *[_type == "about" && _id == "about"][0]{ statement, bio, facts[]{ _key, label, value } }
 `;
 
 export const allExhibitionsQuery = groq`

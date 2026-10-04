@@ -7,17 +7,17 @@ export const about = defineType({
   // Singleton — only one instance, enforced via structure.ts
   fields: [
     defineField({
-      name: 'bio',
-      title: 'Bio (long form)',
-      type: 'array',
-      of: [{ type: 'block' }],
-      description: 'Shown in the About section. Use italics for emphasis.',
+      name: 'statement',
+      title: 'Statement',
+      type: 'headline',
+      description: 'The large sentence on the left. Bold words are set in the accent colour.',
     }),
     defineField({
-      name: 'portrait',
-      title: 'Portrait photo',
-      type: 'image',
-      options: { hotspot: true },
+      name: 'bio',
+      title: 'Bio',
+      type: 'array',
+      of: [{ type: 'block' }],
+      description: 'The paragraphs on the right.',
     }),
     defineField({
       name: 'facts',
@@ -28,12 +28,19 @@ export const about = defineType({
           type: 'object',
           fields: [
             defineField({ name: 'label', title: 'Label', type: 'string', validation: (r) => r.required() }),
-            defineField({ name: 'value', title: 'Value', type: 'string', validation: (r) => r.required() }),
+            defineField({
+              name: 'value',
+              title: 'Value',
+              type: 'text',
+              rows: 2,
+              description: 'Press Enter for a second line.',
+              validation: (r) => r.required(),
+            }),
           ],
           preview: { select: { title: 'label', subtitle: 'value' } },
         },
       ],
-      description: 'Lives & works, Medium, Representation, etc.',
+      description: 'Lives & works, Medium, Enquiries, etc.',
     }),
   ],
   preview: { prepare: () => ({ title: 'About page' }) },
