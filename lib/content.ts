@@ -25,6 +25,7 @@ export type SiteSettings = {
   contactText?: string;
   seoTitle?: string;
   seoDescription?: string;
+  artistSummary?: string;
   ogImage?: string;
   consentText?: string;
 };
@@ -63,3 +64,21 @@ export const plainText = (blocks?: PortableTextBlock[]) =>
   (blocks ?? [])
     .map((b) => (Array.isArray(b.children) ? b.children.map((c) => c.text ?? '').join('') : ''))
     .join(' ');
+
+/* Open Graph / Twitter share fields for pages without their own image. Next.js
+   replaces (doesn't merge) a parent's openGraph, so each page spreads these in.
+   The image is served as a 1200×630 JPG: the uploaded PNG is ~600 KB, too heavy
+   for WhatsApp previews. */
+export function sharedSocial(s: SiteSettings, url: string, alt?: string) {
+  const image = s.ogImage ? `${s.ogImage}?w=1200&h=630&fit=crop&fm=jpg&q=80` : undefined;
+  return {
+    openGraph: {
+      type: 'website' as const,
+      siteName: s.title,
+      url,
+      locale: 'en_US',
+      images: image ? [{ url: image, width: 1200, height: 630, alt: alt ?? s.seoTitle }] : undefined,
+    },
+    twitter: { card: 'summary_large_image' as const, images: image ? [image] : undefined },
+  };
+}

@@ -1,8 +1,10 @@
 import type { Metadata, Viewport } from 'next';
 import { Bricolage_Grotesque, Space_Mono } from 'next/font/google';
 import './globals.css';
-import { getSiteSettings } from '@/lib/content';
+import { getSiteSettings, sharedSocial } from '@/lib/content';
 import { ConsentBanner } from '@/components/ConsentBanner';
+import { JsonLd } from '@/components/JsonLd';
+import { siteJsonLd } from '@/lib/structuredData';
 
 const bricolage = Bricolage_Grotesque({
   variable: '--font-bricolage',
@@ -21,11 +23,13 @@ const spaceMono = Space_Mono({
 /* Title, description and share image come from Site settings in Sanity.
    Icons and the manifest are site assets and stay in /public. */
 export async function generateMetadata(): Promise<Metadata> {
-  const { title, seoTitle, seoDescription, ogImage } = await getSiteSettings();
-  const images = ogImage ? [{ url: ogImage, width: 1200, height: 630, alt: seoTitle }] : undefined;
+  const settings = await getSiteSettings();
+  const { title, seoTitle, seoDescription, artistSummary } = settings;
+  const description = seoDescription || artistSummary;
+  const social = sharedSocial(settings, 'https://poiyee.com');
   return {
     title: seoTitle,
-    description: seoDescription,
+    description,
     metadataBase: new URL('https://poiyee.com'),
     manifest: '/manifest.webmanifest',
     applicationName: title,
@@ -42,21 +46,8 @@ export async function generateMetadata(): Promise<Metadata> {
       apple: '/icons/icon-180.png',
       shortcut: '/favicon.ico',
     },
-    openGraph: {
-      title: seoTitle,
-      description: seoDescription,
-      type: 'website',
-      siteName: title,
-      url: 'https://poiyee.com',
-      locale: 'en_US',
-      images,
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: seoTitle,
-      description: seoDescription,
-      images: ogImage ? [ogImage] : undefined,
-    },
+    openGraph: { ...social.openGraph, title: seoTitle, description },
+    twitter: { ...social.twitter, title: seoTitle, description },
   };
 }
 
@@ -66,12 +57,13 @@ export const viewport: Viewport = {
 };
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const { consentText } = await getSiteSettings();
+  const settings = await getSiteSettings();
   return (
     <html lang="en" className={`${bricolage.variable} ${spaceMono.variable}`}>
       <body className="antialiased">
+        <JsonLd data={siteJsonLd(settings)} />
         {children}
-        <ConsentBanner text={consentText} />
+        <ConsentBanner text={settings.consentText} />
       </body>
     </html>
   );
