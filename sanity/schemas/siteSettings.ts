@@ -104,6 +104,15 @@ export const siteSettings = defineType({
 
     // Contact
     defineField({
+      name: 'commissionsPage',
+      title: 'Commissions page',
+      type: 'reference',
+      to: [{ type: 'page' }],
+      group: 'contact',
+      description:
+        'Optional. When set, the "Commission" link in the footer opens this page instead of the contact form.',
+    }),
+    defineField({
       name: 'contactHeading',
       title: 'Contact page heading',
       type: 'headline',

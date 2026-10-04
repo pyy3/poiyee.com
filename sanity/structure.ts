@@ -23,11 +23,12 @@ export const structure: StructureResolver = (S) =>
       S.documentTypeListItem('artwork').title('Artworks'),
       S.documentTypeListItem('exhibition').title('Exhibitions'),
       S.documentTypeListItem('post').title('Posts'),
+      S.documentTypeListItem('page').title('Pages'),
       S.divider(),
       S.documentTypeListItem('inquiry').title('Inquiries'),
       S.divider(),
       ...S.documentTypeListItems().filter(
         (item) =>
-          !['artwork', 'exhibition', 'post', 'inquiry', ...SINGLETONS].includes(item.getId() ?? ''),
+          !['artwork', 'exhibition', 'post', 'page', 'inquiry', ...SINGLETONS].includes(item.getId() ?? ''),
       ),
     ]);

@@ -1,10 +1,12 @@
 import Link from 'next/link';
 import { getSiteSettings } from '@/lib/content';
+import { getCommissionsPageSlug } from '@/lib/pages';
 import { CookieSettingsButton } from './ConsentBanner';
 
 /* Footer — an oversized wordmark and a plain link ledger. */
 export async function Footer() {
   const { title, contactEmail, instagram, newsletter, footerLine } = await getSiteSettings();
+  const commissionsSlug = await getCommissionsPageSlug();
   return (
     <footer id="contact" className="px-[clamp(22px,4vw,54px)] pb-[8vh] pt-[14vh]">
       <div className="font-script text-[clamp(88px,20vw,320px)] font-normal leading-[1] pl-[0.1em]">
@@ -19,7 +21,7 @@ export async function Footer() {
         </FooterCol>
         <FooterCol title="Enquire">
           <FooterLink href="/contact?kind=acquisition">Acquire a work</FooterLink>
-          <FooterLink href="/contact?kind=commission">Commission</FooterLink>
+          <FooterLink href={commissionsSlug ? `/${commissionsSlug}` : '/contact?kind=commission'}>Commission</FooterLink>
           <FooterLink href="/contact?kind=studio-visit">Studio visit</FooterLink>
         </FooterCol>
         {(contactEmail || instagram || newsletter) && (
