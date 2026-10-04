@@ -4,17 +4,19 @@ import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 import { ContactForm } from '@/components/ContactForm';
 import { Headline } from '@/components/Headline';
-import { getSiteSettings } from '@/lib/content';
+import { getSiteSettings, sharedSocial } from '@/lib/content';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { title, contactText } = await getSiteSettings();
+  const settings = await getSiteSettings();
+  const { title, contactText } = settings;
+  const social = sharedSocial(settings, 'https://poiyee.com/contact');
   const pageTitle = ['Contact', title].filter(Boolean).join(' — ');
   return {
     title: pageTitle,
     alternates: { canonical: '/contact' },
     description: contactText,
-    openGraph: { title: pageTitle, description: contactText, url: 'https://poiyee.com/contact' },
-    twitter: { title: pageTitle, description: contactText },
+    openGraph: { ...social.openGraph, title: pageTitle, description: contactText },
+    twitter: { ...social.twitter, title: pageTitle, description: contactText },
   };
 }
 
