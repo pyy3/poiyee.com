@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { Nav } from '@/components/Nav';
 import { MonumentHome } from '@/components/MonumentHome';
 import { About } from '@/components/About';
@@ -7,6 +8,8 @@ import { getAllWorks } from '@/lib/works';
 import { getSiteSettings, hasText } from '@/lib/content';
 
 export const revalidate = 60;
+
+export const metadata: Metadata = { alternates: { canonical: '/' } };
 
 export default async function Home() {
   const [works, settings] = await Promise.all([getAllWorks(), getSiteSettings()]);

@@ -48,6 +48,7 @@ export const siteSettingsQuery = groq`
     contactText,
     seoTitle,
     seoDescription,
+    artistSummary,
     "ogImage": ogImage.asset->url,
     consentText
   }

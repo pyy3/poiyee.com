@@ -11,6 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const pageTitle = ['Contact', title].filter(Boolean).join(' — ');
   return {
     title: pageTitle,
+    alternates: { canonical: '/contact' },
     description: contactText,
     openGraph: { title: pageTitle, description: contactText, url: 'https://poiyee.com/contact' },
     twitter: { title: pageTitle, description: contactText },

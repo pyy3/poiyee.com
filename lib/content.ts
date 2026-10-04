@@ -25,6 +25,7 @@ export type SiteSettings = {
   contactText?: string;
   seoTitle?: string;
   seoDescription?: string;
+  artistSummary?: string;
   ogImage?: string;
   consentText?: string;
 };
