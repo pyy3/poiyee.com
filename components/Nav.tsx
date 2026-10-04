@@ -9,7 +9,7 @@ export async function Nav() {
     <div className="fixed inset-x-0 top-0 z-40 flex items-center justify-between px-[clamp(22px,4vw,54px)] py-6 text-white mix-blend-difference">
       <Link
         href="/"
-        className="font-display text-[22px] font-extrabold tracking-[-0.02em] text-white no-underline"
+        className="font-script text-[44px] font-normal leading-none text-white [-webkit-text-stroke:0.6px_currentColor] no-underline"
       >
         {title}
       </Link>

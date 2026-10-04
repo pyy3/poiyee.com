@@ -87,7 +87,7 @@ export function WorkDetail({
 
       {/* top bar */}
       <div className="fixed inset-x-0 top-0 z-40 flex items-center justify-between px-[clamp(22px,4vw,54px)] py-6 text-white mix-blend-difference">
-        <Link href="/" className="font-display text-[22px] font-extrabold tracking-[-0.02em] text-white no-underline">
+        <Link href="/" className="font-script text-[44px] font-normal leading-none text-white [-webkit-text-stroke:0.6px_currentColor] no-underline">
           {title}
         </Link>
         <Link href="/#index" className="font-mono text-[11px] uppercase tracking-[0.2em] text-white no-underline hover:opacity-70">
