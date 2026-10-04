@@ -6,9 +6,9 @@ import type { PortableTextBlock } from '@portabletext/react';
 import { workMeta, type Work } from '@/lib/works';
 import { Headline } from './Headline';
 
-/* The homepage: a full-viewport hero, an intro band, then the works as a grid
-   of cards. Each card shows the main photo — usually the painting in its
-   setting (wall, beams, easel) — with the title below. */
+/* The immersive homepage: a full-viewport hero, an intro band, and each work
+   presented monumentally (edge-to-edge, with parallax and a scale annotation).
+   A vertical index rail tracks progress and links into the sequence. */
 export function MonumentHome({
   works,
   hero,
@@ -28,12 +28,17 @@ export function MonumentHome({
   const heroImg = hero?.media[0]?.src;
   const heroTags = [title, ...(tags ?? [])].filter(Boolean);
 
-  // Hero parallax and the scroll progress bar.
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
-    const parallax = root.querySelector<HTMLElement>('[data-parallax]');
+
+    const parallaxEls = Array.from(
+      root.querySelectorAll<HTMLElement>('[data-parallax]'),
+    );
     const progress = root.querySelector<HTMLElement>('[data-progress]');
+    const railLinks = Array.from(root.querySelectorAll<HTMLElement>('[data-rail]'));
+    const workEls = Array.from(root.querySelectorAll<HTMLElement>('[data-work]'));
+
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     let raf = 0;
@@ -42,11 +47,14 @@ export function MonumentHome({
       raf = requestAnimationFrame(() => {
         raf = 0;
         const vh = window.innerHeight;
-        if (parallax && !reduce) {
-          const r = parallax.getBoundingClientRect();
-          const off = (r.top + r.height / 2 - vh / 2) / vh;
-          const img = parallax.querySelector('img');
-          if (img) img.style.transform = `translateY(${(-off * 0.16 * vh).toFixed(1)}px)`;
+        if (!reduce) {
+          for (const el of parallaxEls) {
+            const r = el.getBoundingClientRect();
+            const off = (r.top + r.height / 2 - vh / 2) / vh;
+            const amt = parseFloat(el.dataset.parallax || '0') * vh;
+            const img = el.querySelector('img');
+            if (img) img.style.transform = `translateY(${(-off * amt).toFixed(1)}px)`;
+          }
         }
         const doc = document.documentElement;
         const p = doc.scrollTop / (doc.scrollHeight - doc.clientHeight || 1);
@@ -56,12 +64,34 @@ export function MonumentHome({
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
     onScroll();
+
+    const reveal = new IntersectionObserver(
+      (entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add('is-in')),
+      { threshold: 0.22 },
+    );
+    workEls.forEach((w) => reveal.observe(w));
+
+    const activate = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((e) => {
+          if (!e.isIntersecting) return;
+          const i = workEls.indexOf(e.target as HTMLElement);
+          railLinks.forEach((a) =>
+            a.classList.toggle('rail-active', Number(a.dataset.rail) === i),
+          );
+        }),
+      { threshold: 0.5 },
+    );
+    workEls.forEach((w) => activate.observe(w));
+
     return () => {
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onScroll);
+      reveal.disconnect();
+      activate.disconnect();
       if (raf) cancelAnimationFrame(raf);
     };
-  }, []);
+  }, [works.length]);
 
   return (
     <div ref={rootRef}>
@@ -72,9 +102,30 @@ export function MonumentHome({
         aria-hidden
       />
 
+      {/* vertical index rail */}
+      <nav
+        aria-label="Index of works"
+        className="fixed right-[clamp(14px,3vw,36px)] top-1/2 z-40 hidden -translate-y-1/2 flex-col items-end gap-3 md:flex"
+      >
+        {works.slice(0, 12).map((w, i) => (
+          <a
+            key={w.slug}
+            href={`#work-${i}`}
+            data-rail={i}
+            className="rail-link group flex items-center gap-3 font-mono text-[10px] tracking-[0.14em] text-pencil no-underline"
+          >
+            <span className="rail-label max-w-0 overflow-hidden whitespace-nowrap uppercase opacity-0 transition-all duration-300 group-hover:max-w-[180px] group-hover:opacity-100">
+              {w.name}
+            </span>
+            <span>{String(i + 1).padStart(2, '0')}</span>
+            <span className="rail-tick h-px w-[22px] bg-current transition-all duration-300" />
+          </a>
+        ))}
+      </nav>
+
       {/* HERO */}
       <header className="relative h-screen min-h-[640px] overflow-hidden">
-        <div data-parallax className="absolute inset-x-0 -inset-y-[8%]">
+        <div data-parallax="0.16" className="absolute inset-x-0 -inset-y-[8%]">
           {heroImg && (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={heroImg} alt="" className="h-[116%] w-full object-cover" />
@@ -101,57 +152,81 @@ export function MonumentHome({
 
       {/* INTRO BAND */}
       {intro && (
-        <section className="max-w-[1200px] px-[clamp(22px,4vw,54px)] pb-[10vh] pt-[18vh]">
+        <section className="max-w-[1200px] px-[clamp(22px,4vw,54px)] py-[22vh]">
           <p className="font-display text-[clamp(28px,4vw,58px)] font-light leading-[1.14] tracking-[-0.02em]">
             <Headline value={intro} emphasis="font-semibold text-accent" />
           </p>
         </section>
       )}
 
-      {/* WORKS — card grid */}
-      <section
-        id="index"
-        aria-label="Index of works"
-        className="bg-paper-deep px-[clamp(22px,4vw,54px)] py-[10vh]"
-      >
-        <div className="mx-auto grid max-w-[1300px] grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {works.map((w) => (
-            <article key={w.slug} className="flex flex-col bg-white p-3 shadow-[0_1px_2px_rgba(14,20,27,0.06)]">
+      {/* WORKS */}
+      <section id="index" aria-label="Index of works">
+        {works.map((w, i) => {
+          const { widthCm } = w;
+          const barPx = Math.round(120 + (((widthCm ?? 120) - 90) / 120) * 120);
+          return (
+            <article
+              key={w.slug}
+              id={`work-${i}`}
+              data-work
+              className="work-section relative flex min-h-screen items-center px-[clamp(22px,4vw,54px)] py-[10vh]"
+            >
               <Link
                 href={`/work/${w.slug}`}
                 aria-label={`View ${w.name}`}
-                className="group block aspect-[3/4] overflow-hidden bg-paper-deep"
+                className="work-media group relative flex h-[82vh] w-full items-center justify-center"
               >
+                {/* The whole photo, uncropped: the wall or easel around a painting is
+                    part of how it is shown. */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={`${w.media[0].src}?w=900&auto=format`}
+                  src={w.media[0].src}
                   alt={w.name}
-                  loading="lazy"
-                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                  className="max-h-full max-w-full object-contain shadow-[0_40px_80px_-50px_rgba(14,20,27,0.45)] transition-transform duration-700 group-hover:scale-[1.015]"
                 />
               </Link>
-              <div className="flex flex-1 flex-col px-1 pb-2 pt-4">
-                <h2 className="m-0 font-display text-[clamp(24px,2.2vw,32px)] font-normal leading-[1.08] tracking-[-0.01em]">
-                  <Link href={`/work/${w.slug}`} className="text-ink no-underline hover:text-accent">
-                    {w.name}
-                  </Link>
-                </h2>
-                <div className="mt-2 font-mono text-[10.5px] uppercase tracking-[0.16em] text-pencil">
-                  {workMeta(w)}
-                  {w.isSold && <span className="whitespace-nowrap text-accent"> · Sold</span>}
+
+              {/* scale annotation */}
+              {widthCm && (
+                <div className="pointer-events-none absolute left-[clamp(22px,4vw,54px)] top-[9vh] z-[3] flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.18em] text-white mix-blend-difference">
+                  <span>0</span>
+                  <span className="scale-tick relative h-px bg-current" style={{ width: barPx }} />
+                  <span>{widthCm} cm</span>
                 </div>
-                <div className="mt-auto pt-5">
+              )}
+
+              {/* caption: the name sits on a paper panel so it stays legible over
+                  light and busy paintings */}
+              <div className="pointer-events-none absolute inset-x-[clamp(22px,4vw,54px)] bottom-[6vh] z-[3] flex items-end justify-between gap-6">
+                <div className="font-display text-[clamp(64px,12vw,190px)] font-light leading-[0.8] tracking-[-0.04em] text-ink">
+                  {String(i + 1).padStart(2, '0')}
+                </div>
+                <div className="pointer-events-auto max-w-[min(520px,70%)] bg-paper/90 px-5 py-4 text-right text-ink shadow-[0_18px_40px_-24px_rgba(14,20,27,0.45)] backdrop-blur-sm">
                   <Link
                     href={`/work/${w.slug}`}
-                    className="inline-block border border-accent px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-accent no-underline transition-colors hover:bg-accent hover:text-white"
+                    className="font-display text-[clamp(22px,2.6vw,38px)] font-semibold leading-[1.05] tracking-[-0.01em] text-ink no-underline"
                   >
-                    View work
+                    {w.name}
+                    {w.isSold && (
+                      <span className="ml-3 whitespace-nowrap align-middle font-mono text-[11px] tracking-[0.2em] text-pencil">
+                        · Sold
+                      </span>
+                    )}
+                  </Link>
+                  <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.18em] text-ink/70">
+                    {workMeta(w)}
+                  </div>
+                  <Link
+                    href={`/work/${w.slug}`}
+                    className="mt-3 inline-block border-b border-ink/40 pb-0.5 font-mono text-[11px] uppercase tracking-[0.18em] text-ink no-underline hover:border-accent hover:text-accent"
+                  >
+                    View work →
                   </Link>
                 </div>
               </div>
             </article>
-          ))}
-        </div>
+          );
+        })}
       </section>
     </div>
   );
