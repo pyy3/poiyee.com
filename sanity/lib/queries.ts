@@ -54,7 +54,12 @@ export const siteSettingsQuery = groq`
 `;
 
 export const aboutQuery = groq`
-  *[_type == "about" && _id == "about"][0]{ statement, bio, facts[]{ _key, label, value, link } }
+  *[_type == "about" && _id == "about"][0]{
+    statement,
+    bio,
+    facts[]{ _key, label, value, link },
+    "portrait": portrait{ alt, caption, "src": asset->url, "dimensions": asset->metadata.dimensions{ width, height } }
+  }
 `;
 
 export const privacyQuery = groq`

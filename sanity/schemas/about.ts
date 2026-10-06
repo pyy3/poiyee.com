@@ -20,6 +20,21 @@ export const about = defineType({
       description: 'The paragraphs on the right.',
     }),
     defineField({
+      name: 'portrait',
+      title: 'Portrait photo',
+      type: 'image',
+      description: 'Shown whole (uncropped) under the statement. A photo of you in the studio works well.',
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Description',
+          type: 'string',
+          description: 'What the photo shows, for search engines and screen readers, e.g. "Poi Yee in her studio holding A day in Kyoto".',
+        }),
+        defineField({ name: 'caption', title: 'Caption', type: 'string', description: 'Optional small line under the photo.' }),
+      ],
+    }),
+    defineField({
       name: 'facts',
       title: 'Facts column',
       type: 'array',

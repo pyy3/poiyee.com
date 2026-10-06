@@ -33,6 +33,12 @@ export type About = {
   statement?: PortableTextBlock[];
   bio?: PortableTextBlock[];
   facts?: { _key: string; label: string; value: string; link?: string }[];
+  portrait?: {
+    src?: string;
+    alt?: string;
+    caption?: string;
+    dimensions?: { width: number; height: number };
+  };
 };
 
 const opts = { next: { revalidate: 60 } };
