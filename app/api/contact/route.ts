@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import { NextRequest, NextResponse } from 'next/server';
 import { writeClient } from '@/sanity/lib/writeClient';
 
@@ -48,7 +49,12 @@ export async function POST(req: NextRequest) {
     }
   }
 
+  // The dataset is public, but Sanity only serves root-path documents to
+  // anonymous readers: an ID with a dot ("inquiry.<uuid>") is readable only
+  // with a token, so visitors' names, emails and messages stay private while
+  // Studio still lists them. https://www.sanity.io/docs/ids
   const doc = await writeClient.create({
+    _id: `inquiry.${randomUUID()}`,
     _type: 'inquiry',
     name: name || undefined,
     email,
